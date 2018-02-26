@@ -10,7 +10,7 @@ dir.create("docs")
 # Copy knitted html files
 htmlFiles <- list.files(pattern="*.html")
 if (length(htmlFiles) > 0)
-  file.rename(from=htmlFiles, to=paste("docs/", htmlFiles, sep=""))
+  file.rename(from=htmlFiles, to=paste("docs/", htmlFiles, sep=""), overwrite=TRUE)
 # Figures
 html_filesDir <- list.files(pattern="*_files")
 if (length(html_filesDir) > 0) {
@@ -36,5 +36,5 @@ if (length(pdfFiles) > 0)
   file.rename(from=pdfFiles, to=paste("docs/", pdfFiles, sep=""))
 
 # Copy README.md to docs
-file.copy(from="README.md", to="docs/README.md")
+file.copy(from="README.md", to="docs/README.md", overwrite=TRUE)
 
