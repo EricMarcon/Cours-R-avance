@@ -6,8 +6,6 @@ Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de 
 
 # Langage
 
-[Voir le support](https://EricMarcon.github.io/Cours-R-Avance/Langage.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-Avance/Langage.pdf)
-
 ## Structure du langage
 
 ### Structures de données

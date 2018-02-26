@@ -1,0 +1,45 @@
+---
+title: 'R: Langage'
+author: "Eric Marcon"
+date: "02 mai 2018"
+output:
+  ioslides_presentation:
+    logo: EcoFoG2017.png
+  beamer_presentation:
+    df_print: kable
+    fig_caption: no
+    includes:
+      in_header: EcoFoGBeamer.tex
+    keep_tex: yes
+    slide_level: 2
+  slidy_presentation: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# First Part
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+head(cars)
+```
+
+## Two Column Layout 
+
+\begincols
+  \begincol{.48\textwidth}
+
+This slide has two columns.
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+  \endcol
+  \begincol{.48\textwidth}
+
+```{r pressure2}
+plot(pressure)
+```
+
+  \endcol
+\endcols
