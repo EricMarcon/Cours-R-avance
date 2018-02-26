@@ -4,6 +4,11 @@
 
 Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de Guyane.
 
+# Préparation
+
+[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Preparation.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Preparation.pdf)
+
+
 # Langage
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Langage.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Langage.pdf)

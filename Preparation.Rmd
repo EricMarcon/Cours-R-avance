@@ -1,0 +1,190 @@
+---
+title: 'R: Préparation'
+author: "Eric Marcon"
+date: "02 mai 2018"
+output:
+  beamer_presentation:
+    df_print: kable
+    fig_caption: no
+    includes:
+      in_header: EcoFoGBeamer.tex
+    keep_tex: no
+    slide_level: 2
+  ioslides_presentation:
+    logo: EcoFoG2017.png
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, tidy=TRUE, tidy.opts=list(blank=FALSE, width.cutoff=40))
+```
+
+# R
+
+## Espace de travail
+
+Dossier personnel, appelé **~** par RStudio :
+
+```{r R_USER, echo=TRUE}
+Sys.getenv("R_USER")
+```
+
+- Mes Documents sous Windows ;
+
+- Home sous Mac ou Linux.
+
+Travailler dans un sous-dossier, par exemple : _Formation_. 
+
+Pas d'espace ni caractère spécial dans les noms de dossier.
+
+
+## Versions de R
+
+Trois à six versions par an. Utiliser impérativement la mineure en cours (ex.: 3.4).
+
+R ne désinstalle pas les versions précédentes :
+
+- Désinstaller manuellement ;
+
+- Nettoyer le dossier des packages _~/R/win-library/version_
+
+```{r R_LIBS_USER, echo=TRUE}
+Sys.getenv("R_LIBS_USER")
+```
+
+## Librairies système et utilisateur
+
+Stockage des packages dans la librairie système si R peut y écrire.
+
+```{r R-library, echo=FALSE, out.width='40%'}
+knitr::include_graphics("Graphics/R-library.png")
+```
+
+
+
+# RStudio
+
+
+## Environnement de travail
+
+Incontournable.
+
+Intègre la majorité des outils utiles.
+
+Version > 1 indispensable.
+
+[RStudio Server](https://www.ecofog.gf/RStudio1/) est strictement équivalent.
+
+
+## Projet
+
+Organiser le travail en projets :
+
+- un dossier dans ~ (ou un sous-dossier de ~) ;
+
+- un fichier .Rproj dans le dossier.
+
+Création par le menu _New Project_.
+
+Pas de caractères spéciaux, pas d'espace dans le nom.
+
+
+## Environnement de travail
+
+La fenêtre _Environnement_ liste les variables et fonctions.
+
+- Sauvegarde dans un fichier RData / Ouverture d'un RData ;
+
+- Sauvegarde automatique en fin de session.
+
+La fenêtre _History_ liste l'historique des commandes:
+
+- Sauvegarde, idem ;
+
+- Envoi à la console ou au fichier source.
+
+
+## Packages
+
+Utiliser un fichier _Packages.R_.
+
+```{r Packages, echo=TRUE, eval=FALSE}
+# Install necessary packages only
+InstallPackages <- function(Packages) {
+  sapply(Packages, function(Package) 
+    if (!Package %in% installed.packages()[, 1]) install.packages(Package))
+}
+# Markdown
+InstallPackages(c("base64enc", "knitr", "rmarkdown", "bookdown"))
+# Other packages
+InstallPackages(c("RODBC", "devtools"))
+# EcoFoG
+devtools::install_github("EcoFoG/EcoFoG")
+```
+
+
+## Package EcoFoG
+
+[Sur GitHub](https://ecofog.github.io/EcoFoG/Introduction.html).
+
+Contient des modèles d'article, de présentation, d'ouvrage.
+
+Contient du code à usage interne :
+
+- Accès à la base Guyafor ;
+
+- Outil pour la création de cartes de Paracou.
+
+En développement...
+
+
+
+# Logiciels
+
+
+## Architecture
+
+R utilise des packages et appelle des programmes externes pour la création de documents et de packages.
+
+Liste avec liens maintenue dans la [vignette du package EcoFoG](https://ecofog.github.io/EcoFoG/Introduction.html#environnement-logiciel).
+
+## Packages R
+
+- devtools : utilitaires pour le développement ;
+
+- knitr, rmarkdown, bookdown: rédaction avec RMarkdown.
+
+Utiliser _Packages.R_ pour une réinstallation rapide.
+
+
+## LaTeX
+
+Production de fichiers PDF :
+
+- Présentations Beamer ;
+
+- Articles et ouvrages PDF.
+
+Installer _MikTex_ sous Windows, _MacTex_ sous Mac, _TexLive_ sous Linux.
+
+Compléter par _TeXstudio_ pour débugger les compilations difficiles et _Jabref_ pour gérer les fichiers bib.
+
+
+## Bibliographie
+
+Utiliser un gestionnaire bibliographique capable de produire un fichier _bib_ : _Mendeley_ ou _Zotero._
+
+_Jabref_ permet de gérer totalement sa bibliographie au format _BibTeX_.
+
+
+## Développement
+
+Sous Windows, compléter R par Rtools : outils pour R.
+
+Installations souhaitables : 
+
+- ImageMagik : traitement des images ;
+
+- qpdf : vérification de la compression des fichiers PDF ;
+
+- Ghostscript : traitement des fichiers PDF ;
+
+- perl : moteur de pdfcrop, pour le rognage automatique des images.

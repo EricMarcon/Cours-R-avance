@@ -10,7 +10,7 @@ dir.create("docs")
 # Copy knitted html files
 htmlFiles <- list.files(pattern="*.html")
 if (length(htmlFiles) > 0)
-  file.rename(from=htmlFiles, to=paste("docs/", htmlFiles, sep=""), overwrite=TRUE)
+  file.rename(from=htmlFiles, to=paste("docs/", htmlFiles, sep=""))
 # Figures
 html_filesDir <- list.files(pattern="*_files")
 if (length(html_filesDir) > 0) {
