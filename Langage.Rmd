@@ -10,36 +10,187 @@ output:
     fig_caption: no
     includes:
       in_header: EcoFoGBeamer.tex
-    keep_tex: yes
+    keep_tex: no
     slide_level: 2
   slidy_presentation: default
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts=list(blank=FALSE, width.cutoff=35))
+options(width=50)
+# Install necessary packages only
+InstallPackages <- function(Packages) {
+  sapply(Packages, function(Package) 
+    if (!Package %in% installed.packages()[, 1]) install.packages(Package))
+}
+InstallPackages(c("pryr", "methods", "R6"))
 ```
 
-# First Part
+# Architecture
 
-## Slide with R Output
+## R-core
 
-```{r cars, echo = TRUE}
-head(cars)
+Fonctions primitives et structures de données de base.
+
+Exemples : fonction `sumc et données de type `matrix`:
+
+```{r Core, echo=TRUE}
+pryr::otype(sum)
+pryr::otype(matrix(1))
 ```
 
-## Two Column Layout 
+## S3
 
-\begincols
-  \begincol{.48\textwidth}
+Langage orienté objet.
 
-This slide has two columns.
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Classes déclaratives.
 
-  \endcol
-  \begincol{.48\textwidth}
-
-```{r pressure2}
-plot(pressure)
+```{r S3-1, echo=TRUE}
+MonPrenom <- "Eric"
+class(MonPrenom) <- "Prenom"
 ```
 
-  \endcol
-\endcols
+
+## S3 - Génériques
+
+Les méthodes sont liées aux fonctions, pas aux objets.
+```{r S3-2, echo=TRUE}
+# Affichage par défaut
+MonPrenom
+print.Prenom <- function(x) cat("Le prénom est", x) 
+# Affichage modifié
+MonPrenom
+```
+
+
+## S3 - print
+
+`print` est une méthode générique ("un générique") déclaré dans base.
+
+```{r print-help, echo=TRUE, eval=FALSE}
+?print
+```
+
+Son code se résume à une déclaration `UseMethod("print")`:
+```{r print-code, echo=TRUE}
+print
+```
+
+## S3 - print
+
+Il existe beaucoup de méthodes pour `print`:
+```{r printS3, echo=TRUE}
+head(methods("print"))
+```
+
+Chacune s'applique à une classe. `print.default` est utilisée en dernier ressort et s'appuie sur le type (R de base), pas la classe (S3).
+
+```{r print.defaut, echo=TRUE}
+typeof(MonPrenom)
+```
+
+## S3 - Héritage
+
+Un objet peut appartenir à plusieurs classes.
+
+```{r S3-3, echo=TRUE}
+class(MonPrenom) <- c("PrenomFrancais", "Prenom")
+inherits(MonPrenom, what = "PrenomFrancais")
+inherits(MonPrenom, what = "Prenom")
+```
+
+## S3 - Héritage
+
+Le générique cherche une méthode pour chaque classe, dans l'ordre.
+
+```{r S3-4, echo=TRUE}
+print.PrenomFrancais <- function(x) cat("Prénom français:", x) 
+MonPrenom
+```
+
+## S3 - Résumé
+
+S3 est le langage courant de R.
+
+Presque tous les packages sont écrits en S3.
+
+Les génériques sont partout mais passent inaperçu:
+
+```{r S3-5, echo=TRUE}
+library("entropart")
+.S3methods(class="SpeciesDistribution")
+```
+
+
+## S4
+
+S4 structure les classes.
+
+```{r S4-Class}
+setClass("Personne",  slots = list(Nom = "character", Prenom = "character"))
+Moi <- new("Personne", Nom="Marcon", Prenom="Eric")
+```
+
+
+## S4 - Méthodes
+
+Les méthodes appartiennent toujours aux fonctions:
+
+```{r S4-print}
+setMethod("print",
+  signature="Personne",
+  function(x, ...) {
+    cat("La personne est:", x@Prenom, x@Nom) 
+  }
+)
+print(Moi)
+```
+
+
+## S4 - Résumé
+
+S4 est plus rigoureux que S3.
+
+Quelques packages sur CRAN : Matrix, stats4,... et beaucoup sur Bioconductor.
+
+
+## RC
+
+RC a été introduit dans R 2.12 (2010) dans le package _methods_.
+
+Les méthodes appartiennent aux classes, comme en C++.
+
+```{r RC-Class}
+PersonneRC <- setRefClass("PersonneRC", 
+                          fields = list(Nom="character", Prenom="character"),
+                          methods = list(print=function() cat(Prenom, Nom)))
+MoiRC <- new("PersonneRC", Nom = "Marcon", Prenom ="Eric")
+MoiRC$print()
+```
+
+## S6
+
+[S6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html) perfectionne RC mais n'est pas inclus dans R.
+
+Les attributs et les méthodes peuvent être publics ou privés.
+
+Une méthode `initialize()` est utilisée comme constructeur.
+
+
+```{r S6-Class}
+library(R6)
+PersonneR6 <- R6Class("PersonneR6", 
+                      public = list(Nom="character", Prenom="character",
+                                    initialize = function(Nom=NA, Prenom=NA) {
+                                      self$Nom <- Nom ; self$Prenom <- Prenom},
+                                    print = function() cat(Prenom, Nom)))
+MoiR6 <- PersonneR6$new(Nom = "Marcon", Prenom ="Eric")
+MoiRC$print()
+```
+
+## RC et S6 - Résumé
+
+Très peu utilisés, plutôt considérés comme un exercice de style.
+
+S6 permet de programmer rigoureusement en objet.
+
+Les performances sont inférieures à celles de S3.
