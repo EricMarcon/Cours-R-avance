@@ -31,7 +31,7 @@ InstallPackages(c("pryr", "methods", "R6"))
 
 Fonctions primitives et structures de données de base.
 
-Exemples : fonction `sumc et données de type `matrix`:
+Exemples : fonction `sum` et données de type `matrix`:
 
 ```{r Core, echo=TRUE}
 pryr::otype(sum)
@@ -67,7 +67,8 @@ MonPrenom
 `print` est une méthode générique ("un générique") déclaré dans base.
 
 ```{r print-help, echo=TRUE, eval=FALSE}
-?print
+help(print)
+pryr::otype(print)
 ```
 
 Son code se résume à une déclaration `UseMethod("print")`:
@@ -86,6 +87,7 @@ Chacune s'applique à une classe. `print.default` est utilisée en dernier resso
 
 ```{r print.defaut, echo=TRUE}
 typeof(MonPrenom)
+pryr::otype(MonPrenom)
 ```
 
 ## S3 - Héritage
@@ -123,11 +125,16 @@ library("entropart")
 
 ## S4
 
-S4 structure les classes.
+S4 structure les classes :
+
+- slots pour les données ;
+
+- constructeur explicite.
 
 ```{r S4-Class}
 setClass("Personne",  slots = list(Nom = "character", Prenom = "character"))
 Moi <- new("Personne", Nom="Marcon", Prenom="Eric")
+pryr::otype(Moi)
 ```
 
 
@@ -155,15 +162,17 @@ Quelques packages sur CRAN : Matrix, stats4,... et beaucoup sur Bioconductor.
 
 ## RC
 
-RC a été introduit dans R 2.12 (2010) dans le package _methods_.
+RC a été introduit dans R 2.12 (2010) avec le package _methods_.
 
 Les méthodes appartiennent aux classes, comme en C++.
 
-```{r RC-Class}
+```{r RC-Class, tidy=FALSE}
+library("methods")
 PersonneRC <- setRefClass("PersonneRC", 
-                          fields = list(Nom="character", Prenom="character"),
-                          methods = list(print=function() cat(Prenom, Nom)))
+    fields = list(Nom = "character", Prenom = "character"),
+    methods = list(print = function() cat(Prenom, Nom)))
 MoiRC <- new("PersonneRC", Nom = "Marcon", Prenom ="Eric")
+pryr::otype(Moi)
 MoiRC$print()
 ```
 
@@ -189,7 +198,7 @@ MoiRC$print()
 
 ## RC et S6 - Résumé
 
-Très peu utilisés, plutôt considérés comme un exercice de style.
+Très peu utilisés, plutôt considérés comme des exercices de style.
 
 S6 permet de programmer rigoureusement en objet.
 

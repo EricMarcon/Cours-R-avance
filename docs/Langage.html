@@ -120,7 +120,7 @@
 
 <p>Fonctions primitives et structures de données de base.</p>
 
-<p>Exemples : fonction <code>sumc et données de type</code>matrix`:</p>
+<p>Exemples : fonction <code>sum</code> et données de type <code>matrix</code>:</p>
 
 <pre class = 'prettyprint lang-r'>pryr::otype(sum)</pre>
 
@@ -161,7 +161,8 @@ MonPrenom</pre>
 
 <p><code>print</code> est une méthode générique (&quot;un générique&quot;) déclaré dans base.</p>
 
-<pre class = 'prettyprint lang-r'>`?`(print)</pre>
+<pre class = 'prettyprint lang-r'>help(print)
+pryr::otype(print)</pre>
 
 <p>Son code se résume à une déclaration <code>UseMethod(&quot;print&quot;)</code>:</p>
 
@@ -169,7 +170,7 @@ MonPrenom</pre>
 
 <pre >## function (x, ...) 
 ## UseMethod(&quot;print&quot;)
-## &lt;bytecode: 0x000000001bd2f400&gt;
+## &lt;bytecode: 0x000000001deb31f0&gt;
 ## &lt;environment: namespace:base&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>S3 - print</h2></hgroup><article  id="s3---print-1">
@@ -187,6 +188,10 @@ MonPrenom</pre>
 <pre class = 'prettyprint lang-r'>typeof(MonPrenom)</pre>
 
 <pre >## [1] &quot;character&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>pryr::otype(MonPrenom)</pre>
+
+<pre >## [1] &quot;S3&quot;</pre>
 
 </article></slide><slide class=""><hgroup><h2>S3 - Héritage</h2></hgroup><article  id="s3---heritage">
 
@@ -231,12 +236,20 @@ MonPrenom</pre>
 
 </article></slide><slide class=""><hgroup><h2>S4</h2></hgroup><article  id="s4">
 
-<p>S4 structure les classes.</p>
+<p>S4 structure les classes :</p>
+
+<ul>
+<li><p>slots pour les données ;</p></li>
+<li><p>constructeur explicite.</p></li>
+</ul>
 
 <pre class = 'prettyprint lang-r'>setClass(&quot;Personne&quot;, slots = list(Nom = &quot;character&quot;, 
     Prenom = &quot;character&quot;))
 Moi &lt;- new(&quot;Personne&quot;, Nom = &quot;Marcon&quot;, 
-    Prenom = &quot;Eric&quot;)</pre>
+    Prenom = &quot;Eric&quot;)
+pryr::otype(Moi)</pre>
+
+<pre >## [1] &quot;S4&quot;</pre>
 
 </article></slide><slide class=""><hgroup><h2>S4 - Méthodes</h2></hgroup><article  id="s4---methodes">
 
@@ -262,17 +275,20 @@ Moi &lt;- new(&quot;Personne&quot;, Nom = &quot;Marcon&quot;,
 
 </article></slide><slide class=""><hgroup><h2>RC</h2></hgroup><article  id="rc">
 
-<p>RC a été introduit dans R 2.12 (2010) dans le package <em>methods</em>.</p>
+<p>RC a été introduit dans R 2.12 (2010) avec le package <em>methods</em>.</p>
 
 <p>Les méthodes appartiennent aux classes, comme en C++.</p>
 
-<pre class = 'prettyprint lang-r'>PersonneRC &lt;- setRefClass(&quot;PersonneRC&quot;, 
-    fields = list(Nom = &quot;character&quot;, 
-        Prenom = &quot;character&quot;), methods = list(print = function() cat(Prenom, 
-        Nom)))
-MoiRC &lt;- new(&quot;PersonneRC&quot;, Nom = &quot;Marcon&quot;, 
-    Prenom = &quot;Eric&quot;)
-MoiRC$print()</pre>
+<pre class = 'prettyprint lang-r'>library(&quot;methods&quot;)
+PersonneRC &lt;- setRefClass(&quot;PersonneRC&quot;, 
+    fields = list(Nom = &quot;character&quot;, Prenom = &quot;character&quot;),
+    methods = list(print = function() cat(Prenom, Nom)))
+MoiRC &lt;- new(&quot;PersonneRC&quot;, Nom = &quot;Marcon&quot;, Prenom =&quot;Eric&quot;)
+pryr::otype(Moi)</pre>
+
+<pre >## [1] &quot;S4&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>MoiRC$print()</pre>
 
 <pre >## Eric Marcon</pre>
 
@@ -301,7 +317,7 @@ MoiRC$print()</pre>
 
 </article></slide><slide class=""><hgroup><h2>RC et S6 - Résumé</h2></hgroup><article  id="rc-et-s6---resume">
 
-<p>Très peu utilisés, plutôt considérés comme un exercice de style.</p>
+<p>Très peu utilisés, plutôt considérés comme des exercices de style.</p>
 
 <p>S6 permet de programmer rigoureusement en objet.</p>
 
