@@ -13,15 +13,15 @@ Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de 
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Langage.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Langage.pdf)
 
-## Architecture de R
+Architecture de R
 
-## Style de codage
+Style de codage
 
-## Environnements et recherche
+Environnements et recherche
 
-## Eléments du langage
+Eléments du langage
 
-## Vectoriser
+Vectoriser
 
 
 Références
@@ -33,11 +33,11 @@ Références
 
 # Productivité
 
-## Figures pour la publication
+Figures pour la publication
 
-## Ecrire avec RMarkdown
+Ecrire avec RMarkdown
 
-## Collaborer avec GitHub
+Collaborer avec GitHub
 
 Références
 
@@ -48,13 +48,13 @@ Références
 
 # Développement
 
-## Créer un package
+Créer un package
 
-## Inclure du code C
+Inclure du code C
 
-## Paralléliser
+Paralléliser
 
-## Optimiser
+Optimiser
 
 Références
 - [Efficient R programming](https://csgillespie.github.io/efficientR/)

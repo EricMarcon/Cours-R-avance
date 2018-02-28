@@ -13,38 +13,49 @@ Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de 
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Langage.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Langage.pdf)
 
-## Structure du langage
+Architecture de R
 
-### Structures de données
+Style de codage
 
-### Fonctions
+Environnements et recherche
 
-### Vectorisation
+Eléments du langage
 
+Vectoriser
 
-## R, S3, S4, RC et R6
 
 Références
-- [Advanced R by Hadley Wickham](http://adv-r.had.co.nz/OO-essentials.html)
+- [Advanced R de Hadley Wickham](http://adv-r.had.co.nz/OO-essentials.html)
+- [R Internals](http://colinfay.me/r-internals/)
+- [The R Inferno de Patrick Burns](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
 
 
 
 # Productivité
 
-## Figures pour la publication
+Figures pour la publication
 
-## Ecrire avec RMarkdown
+Ecrire avec RMarkdown
 
-## Collaborer avec GitHub
+Collaborer avec GitHub
+
+Références
+
+- [R Markdown](https://rmarkdown.rstudio.com/)
+- [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
 
 
 
 # Développement
 
-## Créer un package
+Créer un package
 
-## Inclure du code C
+Inclure du code C
 
-## Paralléliser
+Paralléliser
 
-## Optimiser
+Optimiser
+
+Références
+- [Efficient R programming](https://csgillespie.github.io/efficientR/)
+- [R packages](http://r-pkgs.had.co.nz/)
