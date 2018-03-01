@@ -3,8 +3,6 @@ title: 'R: Langage'
 author: "Eric Marcon"
 date: "02 mai 2018"
 output:
-  ioslides_presentation:
-    logo: EcoFoG2017.png
   beamer_presentation:
     df_print: default
     fig_caption: no
@@ -12,6 +10,8 @@ output:
       in_header: EcoFoGBeamer.tex
     keep_tex: no
     slide_level: 2
+  ioslides_presentation:
+    logo: EcoFoG2017.png
   slidy_presentation: default
 ---
 ```{r setup, include=FALSE}
@@ -251,7 +251,7 @@ Aller à la ligne entre les commandes, éviter `;`.
 
 Les accolades commencent sur la ligne de la commande, se terminent sur une ligne seule.
 
-Identer avec deux espaces. 
+Indenter avec deux espaces. 
 Tabulations interdites.
 
 ```{r}
@@ -266,10 +266,9 @@ if(a>b) {
 ## Commentaires
 
 Dans le code, commenter toute ligne non évidente (de l'ordre de 2 sur 3).
-
 Commenter le pourquoi, pas le comment sauf extraordinaire.
 
-Le commentaire précède la ligne de code ou se place en fin de ligne.
+Le commentaire précède la ligne de code ou va en fin de ligne.
 
 ```{r, eval=FALSE}
 # Calcul de la surface
@@ -326,7 +325,7 @@ Principes :
 
 
 
-# Environnements et recherches
+# Environnements et recherche
 
 
 ## Hiérarchie des environnements
@@ -387,8 +386,16 @@ knitr::include_graphics("Graphics/map-of-the-world.png")
 
 devtools peut être chargé sans être attaché :
 
-```{r}
+```{r, message=FALSE}
+unloadNamespace("devtools")
+isNamespaceLoaded("devtools")
 loadNamespace("devtools")
+
+```
+
+## Packages chargés non attachés 
+
+```{r}
 search()
 isNamespaceLoaded("devtools")
 ```
@@ -418,6 +425,14 @@ Les objets non exportés par un package sont accessible dans son espace de nom a
 
 `package:::fonction()`
 
+Les autres aussi, mais c'est inutile :
+```{r}
+stats:::sd(rnorm(100))
+```
+
+
+## Objets non exportés
+
 Les méthodes S3 ne sont normalement pas exportées, seul le générique l'est.
 
 ```{r}
@@ -436,7 +451,7 @@ Ils peuvent les importer : `ggplot2` importe plyr.
 knitr::include_graphics("Graphics/imports-depends-plyr.png")
 ```
 
-ou en dépendre : `ggplot2` dépend de `reshape`.
+Ou en dépendre : `ggplot2` dépend de `reshape`.
 
 Un package qui exporte une méthode S3 dépend forcément du package contenant le générique.
 
@@ -812,6 +827,74 @@ sum(x1)
 ```
 
 
+## Fonctions non vectorielles
+
+`sapply()` applique une fonction à chaque élément d'un vecteur ou d'une liste.
+
+```{r}
+x1 <- runif(1000)
+identical(sqrt(x1), sapply(x1, FUN=sqrt))
+library("microbenchmark")
+mb <- microbenchmark(sqrt(x1), sapply(x1, FUN=sqrt), lapply(x1, sqrt), vapply(x1, sqrt, FUN.VALUE = 0))
+summary(mb)[, c("expr", "median")]
+```
+Infiniment plus lent qu'une fonction vectorielle.
+
+- `lapply()` renvoie une liste (économise le temps de `simplify2array()`)
+
+- `vapply()` économise le temps de détermination du type du vecteur
+
+
+## Boucles
+
+Les boucles sont plus rapides !
+
+```{r}
+Boucle <- function(x) {
+  Racine <- vector("numeric", length=length(x))
+  for(i in 1:length(x)) Racine[i] <- sqrt(x[i])
+  return(Racine)
+}
+Vapply <- function(x) vapply(x, FUN=sqrt, 0)
+mb <- microbenchmark(Vapply(x1), Boucle(x1))
+summary(mb)[, c("expr", "median")]
+```
+
+
+## Boucles
+
+Les boucles longues permettent un suivi
+
+```{r}
+Boucle <- function(x) {
+  pgb <- txtProgressBar(min = 0, max = length(x))
+  Racine <- vector("numeric", length=length(x))
+  for(i in 1:length(x)) {
+    Racine[i] <- sqrt(x[i])
+    setTxtProgressBar(pgb, i)
+  }
+  return(Racine)
+}
+RacineX <- Boucle(x1)
+```
+
+
+## replicate et vectorize
+
+`replicate()` répète une instruction.
+
+```{r}
+replicate(3, runif(1))
+```
+
+est équivalent à `runif(3)`.
+
+`vectorize()` rend vectorielle une fonction qui ne l'est pas par des boucles. 
+Ecrire plutôt les boucles.
+
+
+
+
 ## Vectoriser un problème
 
 Données : inventaire d'une parcelle de Paracou, 4 carrés distincts.
@@ -854,16 +937,13 @@ Paracou15X[1:2, ]
 `colSums()` et semblables (`colMeans()`, `rowMeans()`) sont optimisées.
 
 ```{r}
-library("microbenchmark")
 mb <- microbenchmark(apply(Paracou15X, 2, sum), colSums(Paracou15X))
 summary(mb)[, c("expr", "median")]
 colSums(Paracou15X)
 ```
 
 
-## Comptages
-
-Comptage du nombre d'espèces présentes.
+## Comptage du nombre d'espèces
 
 `apply()` ou préparation des données
 
@@ -888,9 +968,16 @@ apply(Paracou15X, 2, Richness)
 Comparaison avec une boucle
 
 ```{r}
-mb <- microbenchmark(for(i in 1:4) Richness(Paracou15X[, i]), apply(Paracou15X, 2, Richness))
+Boucle <- function(Cmnt) {
+  Richesse <- vector("numeric", length=ncol(Cmnt))
+  for(i in 1:ncol(Cmnt)) Richesse[i] <- Richness(Cmnt[, i])
+  return(Richesse)
+}
+Apply <- function(Cmnt) apply(Cmnt, 2, Richness)
+
+mb <- microbenchmark(Boucle(Paracou15X), Apply(Paracou15X))
 summary(mb)[, c("expr", "median")]
 ```
 
-`apply()` clarifie (vectorise) le problème mais n'accélère pas l'exécution.
+`apply()` clarifie (vectorise) le traitement mais ne l'accélère pas.
 
