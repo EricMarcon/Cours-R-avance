@@ -188,3 +188,14 @@ Installations souhaitables :
 - Ghostscript : traitement des fichiers PDF ;
 
 - perl : moteur de pdfcrop, pour le rognage automatique des images.
+
+
+## Git
+
+_Git_ est un outil de gestion de sources.
+
+Le moteur de Git doit être installé. 
+
+RStudio intègre une interface pour Git.
+
+Ouvrir un compte sur [GitHub](https://github.com/) pour collaborer.

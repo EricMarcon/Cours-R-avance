@@ -35,14 +35,15 @@ Références
 
 Figures pour la publication
 
-Ecrire avec RMarkdown
-
 Collaborer avec GitHub
+
+Ecrire avec RMarkdown
 
 Références
 
 - [R Markdown](https://rmarkdown.rstudio.com/)
 - [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
+- [Happy Git and GitHub for the useR](http://happygitwithr.com/)
 
 
 
