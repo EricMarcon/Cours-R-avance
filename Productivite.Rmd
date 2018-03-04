@@ -3,8 +3,6 @@ title: 'R: Productivité'
 author: "Eric Marcon"
 date: "02 mai 2018"
 output:
-  ioslides_presentation:
-    logo: EcoFoG2017.png
   beamer_presentation:
     df_print: default
     fig_caption: no
@@ -12,6 +10,8 @@ output:
       in_header: EcoFoGBeamer.tex
     keep_tex: no
     slide_level: 2
+  ioslides_presentation:
+    logo: EcoFoG2017.png
   slidy_presentation: default
 ---
 ```{r setup, include=FALSE}
@@ -334,9 +334,7 @@ Un projet R contient tout :
 
 Ce n'est pas un package :
 
-- Un package a une organisation formelle inutile pour un article ;
-
-- Un package peut se justifier pour une thèse si les méthodes aboutissent à un package publié.
+- Un package a une organisation formelle inutile pour un article.
 
 
 ## Création du projet
@@ -390,15 +388,17 @@ Voir la [Documentation](http://rmarkdown.rstudio.com/authoring_bibliographies_an
 
 ## Séparer l'atelier et le magasin
 
-Modèles EcoFoG : script GitHubPages.R
+Modèles EcoFoG sauf _ouvrage_ : script _GitHubPages.R_
 
-Les fichiers produits (PDF, HTML, libs) sont déplacés dans /docs.
+Les fichiers produits (PDF, HTML, libs) sont déplacés dans /_docs._
 
-Le fichier /README.md est dupliqué dans /docs.
+Le fichier /README.md est dupliqué dans /_docs_.
 
 - Tricoter aux formats PDF et HTML.
 
-- Exécuter GitHubPages.R.
+- Exécuter _GitHubPages.R_.
+
+Modèles EcoFoG _ouvrage_ : _Build Book_ tricote tout dans /_docs_.
 
 
 ## Collaboration
@@ -411,8 +411,6 @@ Ajouter des collaborateurs.
 ## Présentation
 
 Activer les pages web du dépôt GitHub :
-
-- créer un dossier /docs
 
 - Settings, GitHub Pages :
 

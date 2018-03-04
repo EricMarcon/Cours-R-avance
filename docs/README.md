@@ -33,6 +33,8 @@ Références
 
 # Productivité
 
+[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Productivite.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Productivite.pdf)
+
 Figures pour la publication
 
 Collaborer avec GitHub
@@ -60,3 +62,7 @@ Optimiser
 Références
 - [Efficient R programming](https://csgillespie.github.io/efficientR/)
 - [R packages](http://r-pkgs.had.co.nz/)
+
+
+
+# Tidiverse
