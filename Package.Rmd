@@ -1,0 +1,532 @@
+---
+title: 'R: Créer un package'
+author: "Eric Marcon"
+date: "02 mai 2018"
+output:
+  ioslides_presentation:
+    logo: EcoFoG2017.png
+  beamer_presentation:
+    df_print: default
+    fig_caption: no
+    includes:
+      in_header: EcoFoGBeamer.tex
+    keep_tex: no
+    slide_level: 2
+  slidy_presentation: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts=list(blank=FALSE, width.cutoff=50))
+options(width=50)
+# Install necessary packages only
+InstallPackages <- function(Packages) {
+  sapply(Packages, function(Package) 
+    if (!Package %in% installed.packages()[, 1]) install.packages(Package))
+}
+InstallPackages(c("devtools", "roxygen2"))
+```
+
+# Cadre
+
+## Outil diffusable
+
+Trois fois le même code : écrire une fonction.
+
+Trois utilisations de la même fonction : écrire un package.
+
+
+## Formalisme
+
+Standardisation du code.
+
+Vérifications.
+
+Documentation obligatoire.
+
+
+## Outils
+
+_devtools_ et _roxygen2_ simplifient le travail.
+
+
+
+# Création d'un package
+
+## Conception
+
+A quoi va servir le package ?
+
+- Consolidation de sa recherche : le package rassemble et organise des méthodes. Exemples : _entropart_, _ade4_.
+
+- Outil d'intérêt général. Exemples : _EcoFoG_, _vegan_, _spatstat_, _ggplot2_.
+
+Un package ne doit traiter qu'un sujet.
+Si nécessaire, écrire plusieurs packages.
+
+
+## Exemple travaillé
+
+Package _multiple_ :
+
+- des fonctions : `Double(x)`, `Triple(x)` et `Multiple(x, n)`... pour calculer des multiples.
+
+- des fonctions comme `FuzzyDouble(x)` pour calculer des multiples avec un bruit.
+
+- une représentation graphique du multiple en fonction de `x` (une droite).
+
+## Création
+
+Le package est créé dans le dossier indiqué.
+
+
+```{r, eval=FALSE}
+devtools::create(path="multiple")
+```
+Le dossier final a le nom du package.
+
+Ouvrir le projet du package.
+
+Etudier les fichiers créés.
+
+## DESCRIPTION
+
+```
+Package: multiple
+Title: Compute multiples
+Version: 0.0.0.9000
+Authors@R: person("First", "Last", email = 
+  "first.last@example.com", role = c("aut", "cre"))
+Description: Efficiently calculate multiples of numbers, 
+  following Me et al. (2018).
+Depends: R (>= 3.4.3)
+License: GNU General Public License
+Encoding: UTF-8
+LazyData: true
+```
+
+
+## Fonctions
+
+Code dans des fichiers .R
+
+Organisation libre, les fichiers ne seront pas dans le package.
+
+Choix :
+
+- un fichier `Project.R` pour le code commun à tout le package
+
+- un fichier R par groupe de fonctions, ici :  `Double.R` et `FuzzyDouble.R`
+
+
+## Project.R
+
+Code commun
+
+```
+#' multiple
+#'
+#' Exercise package
+#'
+#' @name multiple
+#' @docType package
+#' @import ggplot2  # Erreur volontaire
+NULL
+```
+
+## Compute.R
+
+Première version de `Double(x)`
+
+```{r}
+Double <- function(number) {
+  return(2*number)
+}
+```
+
+Exécuter le code pour charger la fonction en mémoire.
+
+Tester.
+
+## Documenter
+
+_Insert Roxygen sleleton_ :
+
+```
+#' Double
+#' 
+#' Compute the Double value of a vector
+#' 
+#' The Double is calculated by multiplying each value by 2.
+#'
+#' @param number A numeric vector
+#'
+#' @return A vector containing the Double values.
+#' @export
+#'
+#' @examples
+#' Double(runif(3))
+```
+`Double()` est exportée.
+
+
+## Oxygéner et installer
+
+_Build Source package_ : crée multiple_0.0.0.9000.tar.gz avec sa documentation.
+
+Etudier le contenu de `man`
+
+Charger le package :
+
+- Nettoyer l'environnement (fonctions en mémoire)
+
+- _Install and Restart_
+
+```{r, tidy=FALSE, eval=FALSE}
+?multiple
+```
+
+
+## Vérifier le package
+
+_Check_
+
+```
+(...)
+checking package dependencies ... ERROR
+Namespace dependency not required: 'ggplot2'
+
+(...)
+R CMD check results
+1 error  | 0 warnings | 0 notes
+```
+Corriger _toutes_ les erreurs, avertissements et notes.
+
+## Ecrire un générique
+
+Problème : `Double()` transforme les entiers en réels.
+
+```{r}
+str(Double(1L))
+```
+
+Solution :
+```{r}
+str(1L*2L)
+```
+
+## Ecrire un générique
+
+```{r}
+Double <- function(x, ...) {
+  UseMethod("Double")
+}
+
+Double.default <- function(x) {
+  return(2*x)
+}
+
+Double.integer <- function(x) {
+  return(2L*x)
+}
+```
+
+Exécuter et tester.
+
+```{r}
+str(Double(2L))
+```
+
+
+## Documenter
+
+Un seul fichier d'aide : `@name` et `@rdname`
+
+```
+#' Double
+(...)
+#' @param x A vector
+#' @param ... Unused
+(...)
+#' @name Double
+#NULL
+
+#' @rdname Double
+#' export
+Double <- function(x, ...) {
+  UseMethod("Double")
+}
+
+```
+
+
+## Documenter
+
+Les méthodes S3 doivent être déclarées, pas exportées mais Roxygen exige `@export` pour la déclaration.
+
+```
+#' @rdname Double
+#' @method Double default
+#' @export
+Double.default <- function(x) {
+  return(2*x)
+}
+
+#' @rdname Double
+#' @method Double integer
+#' @export
+Double.integer <- function(x) {
+  return(2L*x)
+}
+```
+_Build Source package_, _Install and Restart_ puis `?Double`
+
+
+## Traiter les erreurs
+
+`Double.default()` peut revevoir un objet non numérique.
+
+```{r}
+Double.default <- function(x) {
+  # Input check
+  if (!is.numeric(x)) stop("Double requires a numeric object")
+  
+  # Compute and return
+  return(2*x)
+}
+```
+
+Tester après _Install and Restart_ (Oxygénation inutile).
+
+Que se passe-t-il si `x` est une matrice ?
+```
+#' @param x An object
+```
+
+## Double avec bruit
+
+Objectif : écrire une fonction double, avec un terme d'erreur normal, qui retourne un data.frame avec `x` et son double, facile à dessiner.
+
+La fonction va dans un nouveau fichier : `FuzzyDouble.R`
+
+Ecrire la fonction et la tester en la sourçant.
+
+
+## Fonction 
+
+```{r, eval=FALSE}
+FuzzyDouble <- function(x, mean=0, sd=1) {
+
+  # Double x and add normal error
+  y <- 2*x+stats::rnorm(n=length(x), mean=mean, sd=sd)
+  # Make a data.frame
+  fuzzydouble <- data.frame(x=x, y=y)
+  # Make it a FuzzyMultiple object
+  class(fuzzydouble) <- c("FuzzyDouble", class(fuzzydouble))
+
+  return(fuzzydouble)
+}
+```
+
+Remarquer :
+
+- `stats::rnorm()` ; Classe ;
+
+- Commentaires
+
+
+## Fonction 
+
+Ne pas oublier les tests !
+
+```{r, eval=FALSE}
+FuzzyDouble <- function(x, mean=0, sd=1) {
+  # Input check
+  if (!is.numeric(x)) stop("Double requires a numeric object")
+  if (!is.numeric(mean)) stop("The mean noise must be numeric")
+  if (!is.numeric(sd)) stop("The standard deviation of the noise must be numeric")
+  if (length(mean)>1 | length(sd)>1) stop("The mean and standard deviation of the noise must be of length 1")
+  if (sd < 0) stop("The standard deviation of the noise must be positive")
+
+ # (...)
+}
+```
+
+## Documenter
+
+```
+#' FuzzyDouble
+#'
+#' Fuzzy double of a numeric object.
+#'
+#' Doubles an object with a random noise: a Gaussian error drawn 
+#'   by \code{\link{rnorm}}.
+#'
+#' @param x A numeric object
+#' @param mean The mean noise. Default is 0.
+#' @param sd The standard deviation of the noise. Default is 1.
+#'
+#' @return a \code{FuzzyDouble} object which is a data.frame with 
+#'   columns \code{x} for the input and \code{y} for the output.
+#'
+#' @seealso \code{\link{plot.FuzzyDouble}}, 
+#'   \code{\link{autoplot.FuzzyDouble}}
+#' @export
+```
+
+Remarquer : le lien vers `rnorm`, `@seealso`.
+
+## Réoxygéner 
+
+Nettoyer l'environnement
+
+_Build Source package_
+
+_Install and Restart_ 
+
+`?FuzzyDouble`
+
+
+## Figures
+
+Ecrire un méthode `plot` pour `FuzzyDouble`
+
+```{r}
+plot.FuzzyDouble <- function(x, xlab="x", ylab="Double", ..., LineCol="red") {
+  # xy standard plot
+  graphics::plot(x$x, x$y, xlab=xlab, ylab=ylab, ...)
+  # Add the regression line
+  graphics::lines(x$x, 2*x$x, col=LineCol)
+}
+```
+
+Remarquer :
+
+- Les `...` et le passage de `xlab` et `ylab`
+
+
+## Figures
+
+Ecrire un méthode `autoplot` pour `FuzzyDouble`
+
+```{r}
+autoplot.FuzzyDouble <- function(x, xlab="x", ylab="Double", ..., LineCol="red") {
+  # ggplot
+  thePlot <- ggplot2::ggplot(data = x, ggplot2::aes_(x=~x, y=~y)) + 
+    ggplot2::geom_point() +
+    ggplot2::labs(x=xlab, y=ylab) + 
+    ggplot2::geom_line(ggplot2::aes_(y=~2*x), colour=LineCol)
+  return(thePlot)
+}
+
+```
+
+## Documenter
+
+```
+#' Plot FuzzyDouble
+#'
+#' Plot a FuzzyDouble object
+#'
+#' @param x The \code{\link{FuzzyDouble}} object
+#' @param xlab The X-axis label
+#' @param ylab The Y-axis label
+#' @param ... Extra parameters passed to \code{\link{plot}}
+#' @param LineCol The color of the line representing $y=2x$
+#'
+#' @importFrom graphics plot
+#' @method plot FuzzyDouble
+#' @export
+#'
+#' @examples
+#' plot(FuzzyDouble(1:10))
+```
+Remarquer : la formule mathématique, la déclaration de la méthode S3 et l'importation du générique.
+
+
+## Documenter
+
+```
+#' Plot FuzzyDouble
+#'
+#' Plot a FuzzyDouble object with ggplot2
+#'
+#' @inheritParams plot.FuzzyDouble
+#' @param ... Extra parameters passed to \code{\link{autoplot}}
+#'
+#' @return A \code{\link{ggplot}} object.
+#'
+#' @importFrom ggplot2 autoplot
+#' @method autoplot FuzzyDouble
+#' @export
+#'
+#' @examples
+#' autoplot(FuzzyDouble(1:10))
+```
+
+Remarquer : l'héritage des paramètres, sauf `...`
+
+## Vérifier
+
+_Check_  détecte que les packages _stats_, _graphics_ et _ggplpot2_ manquent dans DESCRIPTION.
+
+Corriger :
+```
+Depends: R (>= 3.4.3), graphics, ggplot2
+Imports: stats
+```
+
+## Règles de dépendance
+
+```{r R-library, echo=FALSE, out.width='80%'}
+knitr::include_graphics("Graphics/imports-depends-plyr.png")
+```
+
+Dans `DESCRIPTION`:
+
+- Imports: _stats_ comme _plyr_. Standard.
+
+- Depends: _graphics_ comme _reshape_ à cause des génériques.
+
+
+## Règles de dépendance
+
+Toute fonction d'un package doit être appelée explicitement: `graphics::plot()`
+
+- Ne pas importer ces fonctions dans l'espace de nom (`@importFrom`).
+
+- Leurs packages doivent être déclarés _Imports_ dans `DESCRIPTION`.
+
+
+## Règles de dépendance
+
+Les fonctions publiques du package doivent être exportées (`@export`), y compris les génériques.
+
+Les méthodes S3 ne sont pas exportées mais obligatoirement déclarées (`@method`). 
+
+Attention : Roxygen2 ne les déclare que si `@export` est ajouté.
+
+Conséquence : les génériques doivent être importés (`@importFrom`) et leur package déclaré _Depends_ dans `DESCRIPTION` pour être exportés.
+
+Etudier `NAMESPACE`
+
+
+## Reste à écrire
+
+La fonction `Multiple(x, n)` avec un paramètre supplémentaire.
+
+`Double(x)` pourrait appeler `Multiple(x, 2)` et lui sous-traiter les vérifications et les calculs.
+
+Une classe `Multiple` dont `n` pourrait être un attribut, ses méthodes `plot` et `autoplot`...
+
+
+# Contrôle de source
+
+## Objectif
+
+Suivre le développement du package.
+
+Collaborer.
+
+Le rendre accessible sur GitHub.
+
+Bénéficier des outils de GitHub : intégration continue, couverture du code.
+
