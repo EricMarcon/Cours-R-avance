@@ -51,6 +51,8 @@ Références
 
 # Développement
 
+[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Package.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Package.pdf)
+
 Créer un package
 
 Inclure du code C
