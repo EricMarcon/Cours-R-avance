@@ -6,6 +6,13 @@
 \usefonttheme{professionalfonts}
 % Font size of code chunks : scriptsize
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\scriptsize}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@verbatim}
+  {\verbatim@font}
+  {\verbatim@font\scriptsize }
+  {}{}
+\makeatother
 
 % Logo
 \pgfdeclareimage[width=1.4cm]{logo}{EcoFoG2017.pdf}

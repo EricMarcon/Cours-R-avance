@@ -344,7 +344,8 @@ FuzzyDouble <- function(x, mean=0, sd=1) {
   if (!is.numeric(x)) stop("Double requires a numeric object")
   if (!is.numeric(mean)) stop("The mean noise must be numeric")
   if (!is.numeric(sd)) stop("The standard deviation of the noise must be numeric")
-  if (length(mean)>1 | length(sd)>1) stop("The mean and standard deviation of the noise must be of length 1")
+  if (length(mean)>1 | length(sd)>1) stop("The mean and standard deviation 
+                                          of the noise must be of length 1")
   if (sd < 0) stop("The standard deviation of the noise must be positive")
 
  # (...)
@@ -752,7 +753,8 @@ Compléter les entêtes de `docs/vignettes/docs.Rmd` et `rd.Rmd` et corriger :
 navpills: |
   <li class="active"><a href='index.html'>Docs</a></li>
   <li><a href='rd.html'>Package Ref</a></li>
-  <li><a href='https://github.com/Utilisateur/Depot'>Github<i class='fa fa-github'></i></a></li>
+  <li><a href='https://github.com/Utilisateur/Depot'>Github<i class
+      ='fa fa-github'></i></a></li>
 ```
 
 
@@ -873,7 +875,7 @@ Problèmes avec [CRAN](https://cran.r-project.org/web/checks/check_results_RcppP
 
 Tester le code pour vérifier :
 
-- sa syntaxe (le code non exécuté n'est pas vérifié par _Check_) ;
+- sa syntaxe (le code non exécuté n'est pas vérifié par _Check_);
 
 - ses résultats.
 
@@ -909,7 +911,7 @@ testthat::context("Double")
 # Random integer vector
 x <- rpois(10, lambda = 100)
 
-testthat::test_that("Default and integer S3 methods give the same result", {
+testthat::test_that("Default and integer methods give same result", {
   testthat::skip_on_cran()
   testthat::expect_equal(Double(x), Double(as.numeric(x)))
 })

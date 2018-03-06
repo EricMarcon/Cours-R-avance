@@ -34,5 +34,23 @@ vignettes/*.pdf
 .Rproj.user
 fig1.*
 
+# Latex files
+*.aux
+*-blx.bib
+*.log
+*.xml
+*.bbl
+*.bcf
+*.blg
+*.synctex.gz
+*.out
+*.toc
+*-concordance.tex
+*(busy)
+*.nav
+*.snm
+*.vrb
+*.tex
+
 # Package multiple
 /multiple/

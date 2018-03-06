@@ -402,7 +402,8 @@ Double.integer &lt;- function(x) {
     if (!is.numeric(sd)) 
         stop(&quot;The standard deviation of the noise must be numeric&quot;)
     if (length(mean) &gt; 1 | length(sd) &gt; 1) 
-        stop(&quot;The mean and standard deviation of the noise must be of length 1&quot;)
+        stop(&quot;The mean and standard deviation 
+                                          of the noise must be of length 1&quot;)
     if (sd &lt; 0) 
         stop(&quot;The standard deviation of the noise must be positive&quot;)
     # (...)
@@ -768,7 +769,8 @@ vignette(&quot;ggplot2-specs&quot;, package = &quot;ggplot2&quot;)</pre>
 <pre >navpills: |
   &lt;li class=&quot;active&quot;&gt;&lt;a href=&#39;index.html&#39;&gt;Docs&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&#39;rd.html&#39;&gt;Package Ref&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&#39;https://github.com/Utilisateur/Depot&#39;&gt;Github&lt;i class=&#39;fa fa-github&#39;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;</pre>
+  &lt;li&gt;&lt;a href=&#39;https://github.com/Utilisateur/Depot&#39;&gt;Github&lt;i class
+      =&#39;fa fa-github&#39;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Construction des vignettes</h2></hgroup><article  id="construction-des-vignettes">
 
@@ -876,7 +878,7 @@ int timesTwo(int x) {
 <p>Tester le code pour vérifier :</p>
 
 <ul>
-<li><p>sa syntaxe (le code non exécuté n&#39;est pas vérifié par <em>Check</em>) ;</p></li>
+<li><p>sa syntaxe (le code non exécuté n&#39;est pas vérifié par <em>Check</em>);</p></li>
 <li><p>ses résultats.</p></li>
 </ul>
 
@@ -906,7 +908,7 @@ int timesTwo(int x) {
 <pre class = 'prettyprint lang-r'>testthat::context(&quot;Double&quot;)
 # Random integer vector
 x &lt;- rpois(10, lambda = 100)
-testthat::test_that(&quot;Default and integer S3 methods give the same result&quot;, 
+testthat::test_that(&quot;Default and integer methods give same result&quot;, 
     {
         testthat::skip_on_cran()
         testthat::expect_equal(Double(x), Double(as.numeric(x)))
