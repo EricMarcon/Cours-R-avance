@@ -4,6 +4,15 @@
 
 Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de Guyane.
 
+# Prérequis
+
+Utilisation courante de R.
+
+Formations préalables :
+- [Try R](http://tryr.codeschool.com/) : formation courte
+- [DataCamp Start Learning R](https://www.datacamp.com/onboarding/learn?from=home&technology=r) : formation plus approfondie
+
+
 # Préparation
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Preparation.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Preparation.pdf)
@@ -65,4 +74,16 @@ Références
 
 
 
-# Tidiverse
+# Tidyverse
+
+Manifeste
+
+Organisation
+
+Pipe
+
+ggplot
+
+Références
+- [R for Data Science](http://r4ds.had.co.nz/)
+- [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
