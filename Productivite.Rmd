@@ -133,7 +133,7 @@ knitr::include_graphics("Graphics/GitHub.PNG")
 
 ## Créer un projet
 
-A partir de rien GitHub :
+A partir de rien :
 
 - Dans GitHub : 
 
