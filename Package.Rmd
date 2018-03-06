@@ -3,8 +3,6 @@ title: 'R: Créer un package'
 author: "Eric Marcon"
 date: "02 mai 2018"
 output:
-  ioslides_presentation:
-    logo: EcoFoG2017.png
   beamer_presentation:
     df_print: default
     fig_caption: no
@@ -12,6 +10,8 @@ output:
       in_header: EcoFoGBeamer.tex
     keep_tex: no
     slide_level: 2
+  ioslides_presentation:
+    logo: EcoFoG2017.png
   slidy_presentation: default
 ---
 ```{r setup, include=FALSE}
@@ -860,11 +860,11 @@ Package _Rcppparallel_
 
 Fonctionnement similaire à _Rcppp_ mais code beaucoup plus complexe.
 
-- Exemple dans _SpatDiv_
+- [Exemple](https://github.com/EricMarcon/SpatDiv/blob/master/src/CountNbd.cpp) dans _SpatDiv_
 
 Extrêmement efficace, y compris sous Windows.
 
-Problèmes avec CRAN.
+Problèmes avec [CRAN](https://cran.r-project.org/web/checks/check_results_RcppParallel.html).
 
 
 # Tests unitaires
@@ -931,7 +931,7 @@ Tester tout le code :
 
 Utiliser codecov.io pour voir le code non couvert.
 
-- Exemple de _entropart_
+- [Exemple](https://codecov.io/github/EricMarcon/entropart) de _entropart_
 
 
 # CRAN
@@ -989,7 +989,7 @@ En cas de rejet, corriger et resoumettre en incrémentant le patch.
 En cas de publication, ajouter un fichier `inst/CITATION`
 
 
-[Exemple]() de `entropart`
+[Exemple](https://github.com/EricMarcon/entropart/blob/master/inst/CITATION) de `entropart`
 
 ```{r}
 citation(package = "entropart")

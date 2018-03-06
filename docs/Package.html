@@ -289,10 +289,10 @@ R CMD check results
 <pre class = 'prettyprint lang-r'>Double &lt;- function(x, ...) {
     UseMethod(&quot;Double&quot;)
 }
-Double.default &lt;- function(x) {
+Double.default &lt;- function(x, ...) {
     return(2 * x)
 }
-Double.integer &lt;- function(x) {
+Double.integer &lt;- function(x, ...) {
     return(2L * x)
 }</pre>
 
@@ -301,6 +301,8 @@ Double.integer &lt;- function(x) {
 <pre class = 'prettyprint lang-r'>str(Double(2L))</pre>
 
 <pre >##  int 4</pre>
+
+<p>Remarquer : le respect de la signature, obligatoire.</p>
 
 </article></slide><slide class=""><hgroup><h2>Documenter</h2></hgroup><article  id="documenter-1">
 
@@ -438,7 +440,7 @@ Double.integer &lt;- function(x) {
 
 <p><code>?FuzzyDouble</code></p>
 
-</article></slide><slide class=""><hgroup><h2>Figures</h2></hgroup><article  id="figures">
+</article></slide><slide class=""><hgroup><h2>Méthodes S3</h2></hgroup><article  id="methodes-s3">
 
 <p>Ecrire un méthode <code>plot</code> pour <code>FuzzyDouble</code></p>
 
@@ -457,12 +459,12 @@ Double.integer &lt;- function(x) {
 <li>Les <code>...</code> et le passage de <code>xlab</code> et <code>ylab</code></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Figures</h2></hgroup><article  id="figures-1">
+</article></slide><slide class=""><hgroup><h2>Méthodes S3</h2></hgroup><article  id="methodes-s3-1">
 
 <p>Ecrire un méthode <code>autoplot</code> pour <code>FuzzyDouble</code></p>
 
-<pre class = 'prettyprint lang-r'>autoplot.FuzzyDouble &lt;- function(x, xlab = &quot;x&quot;, ylab = &quot;Double&quot;, 
-    ..., LineCol = &quot;red&quot;) {
+<pre class = 'prettyprint lang-r'>autoplot.FuzzyDouble &lt;- function(object, xlab = &quot;x&quot;, 
+    ylab = &quot;Double&quot;, ..., LineCol = &quot;red&quot;) {
     # ggplot
     thePlot &lt;- ggplot2::ggplot(data = x, ggplot2::aes_(x = ~x, 
         y = ~y)) + ggplot2::geom_point() + ggplot2::labs(x = xlab, 
@@ -485,6 +487,7 @@ Double.integer &lt;- function(x) {
 #&#39;
 #&#39; @importFrom graphics plot
 #&#39; @method plot FuzzyDouble
+#&#39; @export
 #&#39;
 #&#39; @examples
 #&#39; plot(FuzzyDouble(1:10))</pre>
@@ -498,21 +501,23 @@ Double.integer &lt;- function(x) {
 #&#39; Plot a FuzzyDouble object with ggplot2
 #&#39;
 #&#39; @inheritParams plot.FuzzyDouble
+#&#39; @param object The \code{\link{FuzzyDouble}} object
 #&#39; @param ... Extra parameters passed to \code{\link{autoplot}}
 #&#39;
 #&#39; @return A \code{\link{ggplot}} object.
 #&#39;
 #&#39; @importFrom ggplot2 autoplot
 #&#39; @method autoplot FuzzyDouble
+#&#39; @export
 #&#39;
 #&#39; @examples
 #&#39; autoplot(FuzzyDouble(1:10))</pre>
 
-<p>Remarquer : l&#39;héritage des paramètres.</p>
+<p>Remarquer : l&#39;héritage des paramètres, sauf <code>object</code>. et <code>...</code></p>
 
 </article></slide><slide class=""><hgroup><h2>Vérifier</h2></hgroup><article  id="verifier">
 
-<p><em>Check</em> détecte que les packages <em>stats</em>, <em>graphics</em> et <em>ggplpot2</em> manquent dans DESCRIPTION.</p>
+<p><em>Check</em> détecte que les packages <em>stats</em>, <em>graphics</em> et <em>ggplpot2</em> manquent dans <code>DESCRIPTION</code>.</p>
 
 <p>Corriger :</p>
 
@@ -535,19 +540,19 @@ Imports: stats</pre>
 <p>Toute fonction d&#39;un package doit être appelée explicitement: <code>graphics::plot()</code></p>
 
 <ul>
-<li><p>Ne pas importer ces fonctions dans l&#39;espace de nom (<code>#&#39; @importFrom</code>).</p></li>
+<li><p>Ne pas importer ces fonctions dans l&#39;espace de nom (<code>@importFrom</code>).</p></li>
 <li><p>Leurs packages doivent être déclarés <em>Imports</em> dans <code>DESCRIPTION</code>.</p></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Règles de dépendance</h2></hgroup><article  id="regles-de-dependance-2">
 
-<p>Les fonctions publiques du package doivent être exportées (<code>#&#39; @export</code>), y compris les génériques.</p>
+<p>Les fonctions publiques du package doivent être exportées (<code>@export</code>), y compris les génériques.</p>
 
-<p>Les méthodes S3 ne sont pas exportées mais obligatoirement déclarées (<code>#&#39; @method</code>).</p>
+<p>Les méthodes S3 ne sont pas exportées mais obligatoirement déclarées (<code>@method</code>).</p>
 
-<p>Attention : Roxygen2 ne les déclare que si <code>#&#39; @export</code> est ajouté.</p>
+<p>Attention : Roxygen2 ne les déclare que si <code>@export</code> est ajouté.</p>
 
-<p>Conséquence : les génériques doivent être importés (<code>#&#39; @importFrom</code>) et leur package déclaré <em>Depends</em> dans <code>DESCRIPTION</code> pour être exportés.</p>
+<p>Conséquence : les génériques doivent être importés (<code>@importFrom</code>) et leur package déclaré <em>Depends</em> dans <code>DESCRIPTION</code> pour être exportés.</p>
 
 <p>Etudier <code>NAMESPACE</code></p>
 
@@ -559,6 +564,29 @@ Imports: stats</pre>
 
 <p>Une classe <code>Multiple</code> dont <code>n</code> pourrait être un attribut, ses méthodes <code>plot</code> et <code>autoplot</code>&#8230;</p>
 
+</article></slide><slide class=""><hgroup><h2>Données</h2></hgroup><article  id="donnees">
+
+<p>Des données peuvent être intégrées au package dans un ou des fichiers RData.</p>
+
+<p>Créer un dossier <code>/data</code></p>
+
+<p>La fonction <code>use_data()</code> crée les fichiers:</p>
+
+<pre class = 'prettyprint lang-r'>MyData &lt;- 1:100
+devtools::use_data(MyData)</pre>
+
+</article></slide><slide class=""><hgroup><h2>Documentation des données</h2></hgroup><article  id="documentation-des-donnees">
+
+<p>Dans <code>Project.R</code>:</p>
+
+<pre >#&#39; My Data
+#&#39;
+#&#39; A useless dataset.
+#&#39;
+#&#39; @format A numeric vector
+#&#39; @source \url{http://www.ecofog.gf/}
+&quot;MyData&quot;</pre>
+
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Contrôle de source</h2></hgroup><article  id="controle-de-source">
 
 </article></slide><slide class=""><hgroup><h2>Objectif</h2></hgroup><article  id="objectif">
@@ -569,7 +597,418 @@ Imports: stats</pre>
 
 <p>Le rendre accessible sur GitHub.</p>
 
-<p>Bénéficier des outils de GitHub : intégration continue, couverture du code.</p></article></slide>
+<p>Bénéficier des outils de GitHub : intégration continue, couverture du code.</p>
+
+</article></slide><slide class=""><hgroup><h2>Passer le projet sous contrôle de source</h2></hgroup><article  id="passer-le-projet-sous-controle-de-source">
+
+<p>A partir d&#39;un projet RStudio existant :</p>
+
+<ul>
+<li><p>Passer le projet sous contrôle de version :</p>
+
+<ul>
+<li><p><em>Tools /Version Control /Project Setup&#8230;</em></p></li>
+<li><p>Sélectionner <em>Git</em>.</p></li>
+</ul></li>
+<li><p>Créer un dépôt sur GitHub, récupérer son URL : <a href='https://github.com/MonCompte/MonDepot.git' title=''>https://github.com/MonCompte/MonDepot.git</a></p></li>
+<li><p>Dans le Terminal de RStudio, exécuter :</p></li>
+</ul>
+
+<pre >git remote add origin https://github.com/MonCompte/MonDepot.git
+git push -u origin master</pre>
+
+</article></slide><slide class=""><hgroup><h2>Séance de travail</h2></hgroup><article  id="seance-de-travail">
+
+<ul>
+<li><p>Tirer ;</p></li>
+<li><p>Modifier ;</p></li>
+<li><p><strong>Vérifier : <em>Check</em> pour valider le package.</strong></p></li>
+<li><p>Livrer ;</p></li>
+<li><p>Pousser.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Numéros de version</h2></hgroup><article  id="numeros-de-version">
+
+<p>Standard R :</p>
+
+<p>Majeure.Mineure-Patch.Développement</p>
+
+<p>Dans <code>DESCRIPTION</code> :</p>
+
+<pre >0.0.0.9000</pre>
+
+<ul>
+<li>Rétablir le tiret.</li>
+</ul>
+
+<p>Version de développement à partir de 9000, seulement entre deux versions CRAN:</p>
+
+<pre >0.1-0</pre>
+
+</article></slide><slide class=""><hgroup><h2>NEWS.md</h2></hgroup><article  id="news.md">
+
+<p>Fichier Markdown pour lister les avancées du projet.</p>
+
+<p>Exemple :</p>
+
+<pre ># EcoFoG 1.2-1
+
+## Correction de bug
+
+* Modèle Présentation : tricotage Beamer impossible en absence 
+  de bout de code. Ajout de `\usepackage{fancyvrb}` dans 
+  `EcoFoGBeamer.tex`.
+
+## Améliorations
+
+* _.gitignore_ dans tous les modèles.
+</pre>
+
+</article></slide><slide class=""><hgroup><h2>Séance de travail</h2></hgroup><article  id="seance-de-travail-1">
+
+<ul>
+<li><p>Tirer ;</p></li>
+<li><p>Modifier ;</p></li>
+<li><p>Vérifier : <em>Check</em> pour valider le package.</p></li>
+<li><p><strong>Mettre à jour la version dans <code>DESCRIPTION</code> et compléter <code>NEWS.md</code></strong></p></li>
+<li><p>Livrer ;</p></li>
+<li><p>Pousser.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Intégration continue</h2></hgroup><article  id="integration-continue">
+
+<p><em>Travis-CI</em> vérifier le package par un <em>Check</em> à chaque livraison.</p>
+
+<ul>
+<li><p>Ouvrir un compte sur Travis</p></li>
+<li><p>Ajouter le dépôt GitHub du package.</p></li>
+</ul>
+
+<p><em>codecov.io</em> mesure la proportion du code exécutée par Travis</p>
+
+<ul>
+<li><p>Ouvrir un compte sur <em>codecov.io</em></p></li>
+<li><p>Ajouter le dépôt GitHub du package.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>travis.yml</h2></hgroup><article  id="travis.yml">
+
+<p>Fichier de paramétrage:</p>
+
+<pre >language: R
+sudo: false
+cache: packages
+
+r_packages:
+ - devtools
+ - covr
+
+after_success:
+  - Rscript -e &#39;library(covr); codecov(type =&quot;all&quot;)&#39;
+</pre>
+
+</article></slide><slide class=""><hgroup><h2>Badges</h2></hgroup><article  id="badges">
+
+<p>Dans <code>README.md</code> (package <em>EricMarcon/SpatDiv</em>):</p>
+
+<pre >![stability-wip](https://img.shields.io/badge/
+  stability-work_in_progress-lightgrey.svg)
+
+![Travis-CI Build Status](https://travis-ci.org/EricMarcon/
+ SpatDiv.svg?branch=master)]
+ (https://travis-ci.org/EricMarcon/SpatDiv)
+
+![codecov](https://codecov.io/github/EricMarcon/SpatDiv/
+  branch/master/graphs/badge.svg)]
+  (https://codecov.io/github/EricMarcon/SpatDiv)</pre>
+
+<p>D&#39;autres badges sur <em>shields.io</em>.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Vignette</h2></hgroup><article  id="vignette">
+
+</article></slide><slide class=""><hgroup><h2>Intérêt</h2></hgroup><article  id="interet">
+
+<p>Les vignettes sont la documentation d&#39;un package.</p>
+
+<p>Nombreux formats possibles :</p>
+
+<ul>
+<li><p><a href='https://EricMarcon.github.io/entropart/' title=''>entropart</a> : format packagedocs, totalement déporté.</p></li>
+<li><p><a href='https://ecofog.github.io/EcoFoG/Introduction.html' title=''>EcoFoG</a> : format BioConductor, interdit sur CRAN.</p></li>
+<li><p>Vignettes <em>knitr</em> en PDF&#8230;</p></li>
+</ul>
+
+<pre class = 'prettyprint lang-r'># Liste des vignettes
+vignette(package = &quot;ggplot2&quot;)
+# Ouvrir une vignette
+vignette(&quot;ggplot2-specs&quot;, package = &quot;ggplot2&quot;)</pre>
+
+</article></slide><slide class=""><hgroup><h2>packagedocs</h2></hgroup><article  id="packagedocs">
+
+<p>Installer le package.</p>
+
+<p>Le déclarer dans <code>DESCRIPTION</code> :</p>
+
+<pre >Suggests: packagedocs</pre>
+
+<p><a href='http://hafen.github.io/packagedocs/' title=''>Mode d&#39;emploi</a></p>
+
+<p>La documentation doit être écrite dans <code>vignettes/docs.Rmd</code></p>
+
+<p>Une vignette automatique contient l&#39;aide des fonctions.</p>
+
+</article></slide><slide class=""><hgroup><h2>packagedocs</h2></hgroup><article  id="packagedocs-1">
+
+<p>Initialisation :</p>
+
+<pre class = 'prettyprint lang-r'>packagedocs::init_vignettes()</pre>
+
+<p>Compléter les entêtes de <code>docs/vignettes/docs.Rmd</code> et <code>rd.Rmd</code> et corriger :</p>
+
+<pre >navpills: |
+  &lt;li class=&quot;active&quot;&gt;&lt;a href=&#39;index.html&#39;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&#39;rd.html&#39;&gt;Package Ref&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&#39;https://github.com/Utilisateur/Depot&#39;&gt;Github&lt;i class=&#39;fa fa-github&#39;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Construction des vignettes</h2></hgroup><article  id="construction-des-vignettes">
+
+<p>Exécuter :</p>
+
+<pre class = 'prettyprint lang-r'>packagedocs::build_vignettes(output_dir = &quot;docs&quot;)</pre>
+
+<p>pour créer les vignettes</p>
+
+</article></slide><slide class=""><hgroup><h2>Vignettes en ligne</h2></hgroup><article  id="vignettes-en-ligne">
+
+<p>Pousser sur GitHub.</p>
+
+<p>Activer les pages web sur <code>/docs</code>.</p>
+
+<p>L&#39;appel aux vignettes dans R renvoie sur le site.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Code C++ et parallélisation</h2></hgroup><article  id="code-c-et-parallelisation">
+
+</article></slide><slide class=""><hgroup><h2>Intérêt</h2></hgroup><article  id="interet-1">
+
+<p>Le code C++ est très rapide mais plus compliqué à écrire et déboguer.</p>
+
+<p>A utiliser seulement en cas de besoin. Exemple : <em>dbmss</em></p>
+
+<p>La parallélisation permet d&#39;éxécuter des tâches longues sur plusieurs processeurs ou ordinateurs.</p>
+
+<p>Le code est plus complexe.</p>
+
+<p>La synchronisation des tâches consomme des ressources.</p>
+
+<p>A utiliser seulement en cas de besoin.</p>
+
+</article></slide><slide class=""><hgroup><h2>Code C++</h2></hgroup><article  id="code-c">
+
+<p>Démarrage :</p>
+
+<pre class = 'prettyprint lang-r'>devtools::use_rcpp()</pre>
+
+<p>Dans <code>Project.R</code>:</p>
+
+<pre >#&#39; @useDynLib multiple, .registration = TRUE
+#&#39; @importFrom Rcpp sourceCpp</pre>
+
+</article></slide><slide class=""><hgroup><h2>Code C++</h2></hgroup><article  id="code-c-1">
+
+<p>Le code est dans <code>/src</code>. Créer un fichier C++ :</p>
+
+<pre >#include &lt;Rcpp.h&gt;
+using namespace Rcpp;
+
+//&#39; timesTwo
+//&#39;
+//&#39; Multiplies by 2
+//&#39;
+//&#39; @param x An integer
+//&#39; @export
+// [[Rcpp::export]]
+int timesTwo(int x) {
+   return x * 2;
+}</pre>
+
+<p>Remarquer : la documentation pour <em>Roxygen</em>, dont <code>@export</code> et la directive d&#39;export pour <em>Rcpp</em>, sans apostrophe après les <code>//</code></p>
+
+</article></slide><slide class=""><hgroup><h2>Fonctionnement de Rcpp</h2></hgroup><article  id="fonctionnement-de-rcpp">
+
+<p>Le package <em>Rcpp</em> compile le code C++, en fait un programme exécutable (librairie <em>dll</em>).</p>
+
+<p>Il crée une fonction R du même nom que la fonction C (étudier <code>R/RcppExports.R</code>).</p>
+
+<p>La librairie <em>dll</em> est déclarée dans <code>NAMESPACE</code> et la fonction R est exportée.</p>
+
+</article></slide><slide class=""><hgroup><h2>Paralléliser R</h2></hgroup><article  id="paralleliser-r">
+
+<p>Nombreuses techniques disponibles.</p>
+
+<p>Une très simple pour le code R dans le package <em>parallel</em></p>
+
+<p><code>parallel::mclapply</code> remplace <code>lapply()</code></p>
+
+<p>Sans effet sous Windows.</p>
+
+<ul>
+<li>Test sur RStudio.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Paralléliser C</h2></hgroup><article  id="paralleliser-c">
+
+<p>Package <em>Rcppparallel</em></p>
+
+<p>Fonctionnement similaire à <em>Rcppp</em> mais code beaucoup plus complexe.</p>
+
+<ul>
+<li><a href='https://github.com/EricMarcon/SpatDiv/blob/master/src/CountNbd.cpp' title=''>Exemple</a> dans <em>SpatDiv</em></li>
+</ul>
+
+<p>Extrêmement efficace, y compris sous Windows.</p>
+
+<p>Problèmes avec <a href='https://cran.r-project.org/web/checks/check_results_RcppParallel.html' title=''>CRAN</a>.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Tests unitaires</h2></hgroup><article  id="tests-unitaires">
+
+</article></slide><slide class=""><hgroup><h2>Intérêt</h2></hgroup><article  id="interet-2">
+
+<p>Tester le code pour vérifier :</p>
+
+<ul>
+<li><p>sa syntaxe (le code non exécuté n&#39;est pas vérifié par <em>Check</em>) ;</p></li>
+<li><p>ses résultats.</p></li>
+</ul>
+
+<p>Principes :</p>
+
+<ul>
+<li><p>exécuter tout le code (couverture = 100%) ;</p></li>
+<li><p>comparer les résultats entre eux ou à des références.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Outil</h2></hgroup><article  id="outil">
+
+<p>Package <em>testthat</em></p>
+
+<pre class = 'prettyprint lang-r'>devtools::use_testthat()</pre>
+
+<p>Crée les dossiers et modifie <code>DESCRIPTION</code>.</p>
+
+<pre >Suggests: testthat</pre>
+
+<p>Ajouter les fichiers de tests dans <code>tests/testthat</code></p>
+
+</article></slide><slide class=""><hgroup><h2>Exemple de test</h2></hgroup><article  id="exemple-de-test">
+
+<p><code>Double.R</code> :</p>
+
+<pre class = 'prettyprint lang-r'>testthat::context(&quot;Double&quot;)
+# Random integer vector
+x &lt;- rpois(10, lambda = 100)
+testthat::test_that(&quot;Default and integer S3 methods give the same result&quot;, 
+    {
+        testthat::skip_on_cran()
+        testthat::expect_equal(Double(x), Double(as.numeric(x)))
+    })
+testthat::test_that(&quot;Double(integer) is integer&quot;, {
+    testthat::skip_on_cran()
+    testthat::expect_is(Double(x), &quot;integer&quot;)
+})</pre>
+
+</article></slide><slide class=""><hgroup><h2>Ajout de tests</h2></hgroup><article  id="ajout-de-tests">
+
+<p>Tester tout le code :</p>
+
+<ul>
+<li><p>les tests négatifs :</p></li>
+<li><p>les cas rares.</p></li>
+</ul>
+
+<p>Utiliser codecov.io pour voir le code non couvert.</p>
+
+<ul>
+<li><a href='https://codecov.io/github/EricMarcon/entropart' title=''>Exemple</a> de <em>entropart</em></li>
+</ul>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>CRAN</h2></hgroup><article  id="cran">
+
+</article></slide><slide class=""><hgroup><h2>Intérêt</h2></hgroup><article  id="interet-3">
+
+<p>Un package sur CRAN peut être utilisé par tous.</p>
+
+<p>Il peut être publié : <em>Methods in Ecology and Evolution</em>, &#8230; , <em>The R Journal</em>.</p>
+
+<p>L&#39;auteur aura des retours d&#39;autres utilisateurs.</p>
+
+</article></slide><slide class=""><hgroup><h2>Contraintes</h2></hgroup><article  id="contraintes">
+
+<p>Le responsable du package (<code>role = c(&quot;aut&quot;, &quot;cre&quot;)</code>) doit répondre aux sollicitations de CRAN.</p>
+
+<p>Le package ne doit générer aucun avertissement, et normalement aucune note.</p>
+
+<p>La vérification sur CRAN est plus exigente :</p>
+
+<ul>
+<li><p>plusieurs plateformes ;</p></li>
+<li><p>des tests du code C.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Préparation</h2></hgroup><article  id="preparation">
+
+<p>Vérification OK localement et sur Travis.</p>
+
+<p>Construire la source du package avec la dernière version de R.</p>
+
+<p>Vérifier le package sur :</p>
+
+<ul>
+<li><p><a href='The%20r-hub%20builder' title=''>Win-Builder</a> : plateforme Windows ;</p></li>
+<li><p><a href='https://builder.r-hub.io/' title=''>The r-hub builder</a> : nombreuses plateformes.</p></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Soumission</h2></hgroup><article  id="soumission">
+
+<p>Vérifier que la version est à correcte :</p>
+
+<ul>
+<li><p>patch = 0 sauf si c&#39;est un patch.</p></li>
+<li><p>pas de version de développement.</p></li>
+</ul>
+
+<p>Soumission sur <a href='https://xmpalantir.wu.ac.at/cransubmit/' title=''>CRAN</a>.</p>
+
+<p>En cas de rejet, corriger et resoumettre en incrémentant le patch.</p>
+
+</article></slide><slide class=""><hgroup><h2>Publication</h2></hgroup><article  id="publication">
+
+<p>En cas de publication, ajouter un fichier <code>inst/CITATION</code></p>
+
+<p><a href='https://github.com/EricMarcon/entropart/blob/master/inst/CITATION' title=''>Exemple</a> de <code>entropart</code></p>
+
+<pre class = 'prettyprint lang-r'>citation(package = &quot;entropart&quot;)</pre>
+
+<pre >## 
+## To cite entropart in publications use:
+## 
+##   Eric Marcon, Bruno Herault (2015).
+##   entropart: An R Package to Measure and
+##   Partition Diversity. Journal of
+##   Statistical Software, 67(8), 1-26.
+##   doi:10.18637/jss.v067.i08
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {{entropart}: An {R} Package to Measure and Partition Diversity},
+##     author = {Eric Marcon and Bruno H{\&#39;e}rault},
+##     journal = {Journal of Statistical Software},
+##     year = {2015},
+##     volume = {67},
+##     number = {8},
+##     pages = {1--26},
+##     doi = {10.18637/jss.v067.i08},
+##   }</pre></article></slide>
 
 
   <slide class="backdrop"></slide>
