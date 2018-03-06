@@ -220,11 +220,11 @@ Double <- function(x, ...) {
   UseMethod("Double")
 }
 
-Double.default <- function(x) {
+Double.default <- function(x, ...) {
   return(2*x)
 }
 
-Double.integer <- function(x) {
+Double.integer <- function(x, ...) {
   return(2L*x)
 }
 ```
@@ -235,6 +235,7 @@ Exécuter et tester.
 str(Double(2L))
 ```
 
+Remarquer : le respect de la signature, obligatoire.
 
 ## Documenter
 
@@ -385,7 +386,7 @@ _Install and Restart_
 `?FuzzyDouble`
 
 
-## Figures
+## Méthodes S3
 
 Ecrire un méthode `plot` pour `FuzzyDouble`
 
@@ -403,12 +404,12 @@ Remarquer :
 - Les `...` et le passage de `xlab` et `ylab`
 
 
-## Figures
+## Méthodes S3
 
 Ecrire un méthode `autoplot` pour `FuzzyDouble`
 
 ```{r}
-autoplot.FuzzyDouble <- function(x, xlab="x", ylab="Double", ..., LineCol="red") {
+autoplot.FuzzyDouble <- function(object, xlab="x", ylab="Double", ..., LineCol="red") {
   # ggplot
   thePlot <- ggplot2::ggplot(data = x, ggplot2::aes_(x=~x, y=~y)) + 
     ggplot2::geom_point() +
@@ -450,6 +451,7 @@ Remarquer : la formule mathématique, la déclaration de la méthode S3 et l'imp
 #' Plot a FuzzyDouble object with ggplot2
 #'
 #' @inheritParams plot.FuzzyDouble
+#' @param object The \code{\link{FuzzyDouble}} object
 #' @param ... Extra parameters passed to \code{\link{autoplot}}
 #'
 #' @return A \code{\link{ggplot}} object.
@@ -462,11 +464,11 @@ Remarquer : la formule mathématique, la déclaration de la méthode S3 et l'imp
 #' autoplot(FuzzyDouble(1:10))
 ```
 
-Remarquer : l'héritage des paramètres, sauf `...`
+Remarquer : l'héritage des paramètres, sauf `object`. et `...`
 
 ## Vérifier
 
-_Check_  détecte que les packages _stats_, _graphics_ et _ggplpot2_ manquent dans DESCRIPTION.
+_Check_  détecte que les packages _stats_, _graphics_ et _ggplpot2_ manquent dans `DESCRIPTION`.
 
 Corriger :
 ```
@@ -518,6 +520,35 @@ La fonction `Multiple(x, n)` avec un paramètre supplémentaire.
 Une classe `Multiple` dont `n` pourrait être un attribut, ses méthodes `plot` et `autoplot`...
 
 
+## Données
+
+Des données peuvent être intégrées au package dans un ou des fichiers RData.
+
+Créer un dossier `/data`
+
+La fonction `use_data()` crée les fichiers:
+
+```{r, eval=FALSE}
+MyData <- 1:100
+devtools::use_data(MyData)
+```
+
+
+## Documentation des données
+
+Dans `Project.R`:
+
+```
+#' My Data
+#'
+#' A useless dataset.
+#'
+#' @format A numeric vector
+#' @source \url{http://www.ecofog.gf/}
+"MyData"
+```
+
+
 # Contrôle de source
 
 ## Objectif
@@ -529,4 +560,438 @@ Collaborer.
 Le rendre accessible sur GitHub.
 
 Bénéficier des outils de GitHub : intégration continue, couverture du code.
+
+
+## Passer le projet sous contrôle de source
+
+A partir d'un projet RStudio existant :
+
+- Passer le projet sous contrôle de version : 
+
+    - _Tools /Version Control /Project Setup..._
+    
+    - Sélectionner _Git_.
+
+- Créer un dépôt sur GitHub, récupérer son URL : https://github.com/MonCompte/MonDepot.git
+
+- Dans le Terminal de RStudio, exécuter :
+
+```
+git remote add origin https://github.com/MonCompte/MonDepot.git
+git push -u origin master
+```
+
+## Séance de travail
+
+- Tirer ;
+
+- Modifier ;
+
+- **Vérifier : _Check_ pour valider le package.**
+
+- Livrer ;
+
+- Pousser.
+
+
+## Numéros de version
+
+Standard R :
+
+Majeure.Mineure-Patch.Développement
+
+Dans `DESCRIPTION` :
+```
+0.0.0.9000
+```
+- Rétablir le tiret. 
+
+Version de développement à partir de 9000, seulement entre deux versions CRAN: 
+```
+0.1-0
+```
+
+
+## NEWS.md
+
+Fichier Markdown pour lister les avancées du projet.
+
+Exemple :
+```
+# EcoFoG 1.2-1
+
+## Correction de bug
+
+* Modèle Présentation : tricotage Beamer impossible en absence 
+  de bout de code. Ajout de `\usepackage{fancyvrb}` dans 
+  `EcoFoGBeamer.tex`.
+
+## Améliorations
+
+* _.gitignore_ dans tous les modèles.
+
+```
+## Séance de travail
+
+- Tirer ;
+
+- Modifier ;
+
+- Vérifier : _Check_ pour valider le package.
+
+- **Mettre à jour la version dans `DESCRIPTION` et compléter `NEWS.md`**
+
+- Livrer ;
+
+- Pousser.
+
+
+## Intégration continue
+
+_Travis-CI_ vérifier le package par un _Check_ à chaque livraison.
+
+- Ouvrir un compte sur Travis
+
+- Ajouter le dépôt GitHub du package.
+
+_codecov.io_ mesure la proportion du code exécutée par Travis
+
+- Ouvrir un compte sur _codecov.io_
+
+- Ajouter le dépôt GitHub du package.
+
+
+## travis.yml
+
+Fichier de paramétrage:
+
+```
+language: R
+sudo: false
+cache: packages
+
+r_packages:
+ - devtools
+ - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov(type ="all")'
+
+```
+
+## Badges
+
+Dans `README.md` (package _EricMarcon/SpatDiv_):
+
+```
+![stability-wip](https://img.shields.io/badge/
+  stability-work_in_progress-lightgrey.svg)
+
+![Travis-CI Build Status](https://travis-ci.org/EricMarcon/
+ SpatDiv.svg?branch=master)]
+ (https://travis-ci.org/EricMarcon/SpatDiv)
+
+![codecov](https://codecov.io/github/EricMarcon/SpatDiv/
+  branch/master/graphs/badge.svg)]
+  (https://codecov.io/github/EricMarcon/SpatDiv)
+```
+
+D'autres badges sur _shields.io_.
+
+
+# Vignette
+
+## Intérêt
+
+Les vignettes sont la documentation d'un package.
+
+Nombreux formats possibles :
+
+- [entropart](https://EricMarcon.github.io/entropart/) : format packagedocs, totalement déporté.
+
+- [EcoFoG](https://ecofog.github.io/EcoFoG/Introduction.html) : format BioConductor, interdit sur CRAN.
+
+- Vignettes _knitr_ en PDF...
+
+```{r, eval=FALSE}
+# Liste des vignettes
+vignette(package="ggplot2")
+# Ouvrir une vignette
+vignette("ggplot2-specs", package="ggplot2")
+```
+
+
+## packagedocs
+
+Installer le package. 
+
+Le déclarer dans `DESCRIPTION` :
+
+```
+Suggests: packagedocs
+```
+
+[Mode d'emploi](http://hafen.github.io/packagedocs/)
+
+La documentation doit être écrite dans `vignettes/docs.Rmd`
+
+Une vignette automatique contient l'aide des fonctions.
+
+
+## packagedocs
+
+Initialisation :
+
+```{r, eval=FALSE}
+packagedocs::init_vignettes()
+```
+
+Compléter les entêtes de `docs/vignettes/docs.Rmd` et `rd.Rmd` et corriger :
+
+```
+navpills: |
+  <li class="active"><a href='index.html'>Docs</a></li>
+  <li><a href='rd.html'>Package Ref</a></li>
+  <li><a href='https://github.com/Utilisateur/Depot'>Github<i class='fa fa-github'></i></a></li>
+```
+
+
+## Construction des vignettes
+
+Exécuter :
+```{r, eval=FALSE}
+packagedocs::build_vignettes(output_dir = "docs")
+```
+
+pour créer les vignettes
+
+
+## Vignettes en ligne
+
+Pousser sur GitHub.
+
+Activer les pages web sur `/docs`.
+
+L'appel aux vignettes dans R renvoie sur le site.
+
+
+# Code C++ et parallélisation
+
+## Intérêt
+
+Le code C++ est très rapide mais plus compliqué à écrire et déboguer.
+
+A utiliser seulement en cas de besoin.
+Exemple : _dbmss_
+
+La parallélisation permet d'éxécuter des tâches longues sur plusieurs processeurs ou ordinateurs.
+
+Le code est plus complexe.
+
+La synchronisation des tâches consomme des ressources.
+
+A utiliser seulement en cas de besoin.
+
+
+## Code C++
+
+Démarrage :
+
+```{r, eval=FALSE}
+devtools::use_rcpp()
+```
+
+Dans `Project.R`:
+
+```
+#' @useDynLib multiple, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+```
+
+
+## Code C++
+
+Le code est dans `/src`. Créer un fichier C++ :
+
+```
+#include <Rcpp.h>
+using namespace Rcpp;
+
+//' timesTwo
+//'
+//' Multiplies by 2
+//'
+//' @param x An integer
+//' @export
+// [[Rcpp::export]]
+int timesTwo(int x) {
+   return x * 2;
+}
+```
+
+Remarquer : la documentation pour _Roxygen_, dont `@export` et la directive d'export pour _Rcpp_, sans apostrophe après les `//`
+
+
+## Fonctionnement de Rcpp
+
+Le package _Rcpp_ compile le code C++, en fait un programme exécutable (librairie _dll_).
+
+Il crée une fonction R du même nom que la fonction C (étudier `R/RcppExports.R`).
+
+La librairie _dll_ est déclarée dans `NAMESPACE` et la fonction R est exportée.
+
+
+## Paralléliser R
+
+Nombreuses techniques disponibles.
+
+Une très simple pour le code R dans le package _parallel_
+
+`parallel::mclapply` remplace `lapply()`
+
+Sans effet sous Windows.
+
+- Test sur RStudio.
+
+
+## Paralléliser C
+
+Package _Rcppparallel_
+
+Fonctionnement similaire à _Rcppp_ mais code beaucoup plus complexe.
+
+- Exemple dans _SpatDiv_
+
+Extrêmement efficace, y compris sous Windows.
+
+Problèmes avec CRAN.
+
+
+# Tests unitaires
+
+## Intérêt
+
+Tester le code pour vérifier :
+
+- sa syntaxe (le code non exécuté n'est pas vérifié par _Check_) ;
+
+- ses résultats.
+
+Principes :
+
+- exécuter tout le code (couverture = 100\%) ;
+
+- comparer les résultats entre eux ou à des références.
+
+## Outil
+
+Package _testthat_
+
+```{r, eval=FALSE}
+devtools::use_testthat()
+```
+
+Crée les dossiers et modifie `DESCRIPTION`. 
+```
+Suggests: testthat
+```
+
+Ajouter les fichiers de tests dans `tests/testthat`
+
+
+## Exemple de test
+
+`Double.R` :
+
+```{r}
+testthat::context("Double")
+
+# Random integer vector
+x <- rpois(10, lambda = 100)
+
+testthat::test_that("Default and integer S3 methods give the same result", {
+  testthat::skip_on_cran()
+  testthat::expect_equal(Double(x), Double(as.numeric(x)))
+})
+
+
+testthat::test_that("Double(integer) is integer", {
+  testthat::skip_on_cran()
+  testthat::expect_is(Double(x), "integer")
+})
+```
+
+## Ajout de tests
+
+Tester tout le code :
+
+- les tests négatifs :
+
+- les cas rares.
+
+Utiliser codecov.io pour voir le code non couvert.
+
+- Exemple de _entropart_
+
+
+# CRAN
+
+## Intérêt
+
+Un package sur CRAN peut être utilisé par tous.
+
+Il peut être publié : _Methods in Ecology and Evolution_, ... , _The R Journal_.
+
+L'auteur aura des retours d'autres utilisateurs.
+
+
+## Contraintes
+
+Le responsable du package (`role = c("aut", "cre")`) doit répondre aux sollicitations de CRAN.
+
+Le package ne doit générer aucun avertissement, et normalement aucune note.
+
+La vérification sur CRAN est plus exigente :
+
+- plusieurs plateformes ;
+
+- des tests du code C.
+
+
+## Préparation 
+
+Vérification OK localement et sur Travis.
+
+Construire la source du package avec la dernière version de R. 
+
+Vérifier le package sur : 
+
+- [Win-Builder](The r-hub builder) : plateforme Windows ;
+
+- [The r-hub builder](https://builder.r-hub.io/) : nombreuses plateformes.
+
+
+## Soumission 
+
+Vérifier que la version est à correcte :
+
+- patch = 0 sauf si c'est un patch.
+
+- pas de version de développement.
+
+Soumission sur [CRAN](https://xmpalantir.wu.ac.at/cransubmit/).
+
+En cas de rejet, corriger et resoumettre en incrémentant le patch.
+
+
+## Publication  
+
+En cas de publication, ajouter un fichier `inst/CITATION`
+
+
+[Exemple]() de `entropart`
+
+```{r}
+citation(package = "entropart")
+```
 

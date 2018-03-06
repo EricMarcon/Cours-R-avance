@@ -59,8 +59,6 @@ Inclure du code C
 
 Paralléliser
 
-Optimiser
-
 Références
 - [Efficient R programming](https://csgillespie.github.io/efficientR/)
 - [R packages](http://r-pkgs.had.co.nz/)
