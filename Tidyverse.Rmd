@@ -1,0 +1,421 @@
+---
+title: 'R: Tidyverse'
+author: "Eric Marcon"
+date: "02 mai 2018"
+output:
+  beamer_presentation:
+    df_print: default
+    fig_caption: no
+    includes:
+      in_header: EcoFoGBeamer.tex
+    keep_tex: no
+    slide_level: 2
+  ioslides_presentation:
+    logo: EcoFoG2017.png
+  slidy_presentation: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts=list(blank=FALSE, width.cutoff=50))
+options(width=50)
+# Install necessary packages only
+InstallPackages <- function(Packages) {
+  sapply(Packages, function(Package) 
+    if (!Package %in% installed.packages()[, 1]) install.packages(Package))
+}
+InstallPackages(c("devtools", "tidyverse"))
+library("tidyverse", "EcoFoG", "entropart")
+```
+
+# Manifeste
+
+## Approche complète de l'analyse de données
+
+Données bien rangées (_tidy_)
+
+Enchaînement des opérations (`%>%` de _magrittr_, `+` de _ggplot2_)
+
+Programmation fonctionnelle (pas orientée objet), optimisée pour les utilisateurs (lisibilité plutôt que performance)
+
+```{r, eval=FALSE}
+library("tidyverse")
+vignette("manifesto", package="tidyverse")
+```
+
+Ensemble de packages, appelés par _tidyverse_
+
+
+## Données rectangulaires
+
+Modèle du data frame : une ligne par observation, une colonne par attribut.
+
+Dataframe optimisé : `tibble`
+
+Documentation : `vignette("tibble", package="tibble")`
+
+```{r}
+ggplot2::diamonds
+```
+
+
+## Méthode de travail
+
+
+Bagarre (_Wrangling_) :
+
+- Importation des données
+
+- Rangement (_Tidy_)
+
+- Transformation
+
+Visualisation
+
+Modélisation : non traitée ici. [A lire](http://r4ds.had.co.nz/model-intro.html).
+
+Communication : RMarkdown et sorties graphiques. Lire :
+
+- [Graphics for communication](http://r4ds.had.co.nz/graphics-for-communication.html)
+
+- [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
+
+
+# Bagarre
+
+## Package _readr_
+
+Lecture de fichiers texte variés.
+
+Importation dans un tibble.
+
+[Référence](http://r4ds.had.co.nz/data-import.html#data-import)
+
+
+## Fichier csv
+
+Fonctions `read_csv()` et `read_csv2()`
+
+Remplacent `read.csv()` et `read.csv2()` de base
+
+Plus rapide que les fonctions originales.
+
+
+## Rangement
+
+
+```{r, echo=FALSE, out.width='90%'}
+knitr::include_graphics("Graphics/tidy-1.png")
+```
+
+Approche habituelle en écologie (analyse multivariée par exemple)
+
+Si les données sont mal rangées ("pas tidy"), quelques manipulations de base.
+
+[Référence](http://r4ds.had.co.nz/tidy-data.html)
+
+
+## Exemple
+
+Données : inventaire d'une parcelle de Paracou, 4 carrés distincts.
+
+Installer le package EcoFoG à partir de GitHub
+
+```{r, eval=FALSE}
+devtools::install_github("EcoFoG/EcoFoG")
+```
+
+Extraire les données
+```{r}
+library("EcoFoG")
+Paracou15 <- as.tibble(Paracou2df("Plot='15' AND CensusYear=2016"))
+```
+
+- Afficher Paracou15
+
+
+## Rassemblement (_unite_)
+
+Famille, genre et espèce des arbres sont dans 3 colonnes.
+
+Créer une colonne avec le nom complet de l'espèce.
+
+```{r, tidy=FALSE}
+Paracou15 %>%
+  unite(col=spName, Family, Genus, Species, remove=FALSE) -> Paracou15
+```
+
+- Afficher le résultat.
+
+Le pipeline `%>%` (`Ctrl + Shift + m`) passe la donnée à la fonction suivante.
+
+La commande classique est :
+```{r}
+Paracou15 <- unite(data=Paracou15, col=spName, Family, Genus, Species, remove = FALSE)
+```
+
+
+## Séparation (_separate_)
+
+Opération contraire
+
+```{r, echo=FALSE, out.width='100%'}
+knitr::include_graphics("Graphics/tidy-17.png")
+```
+
+
+## Rassembler des colonnes (_gather_)
+
+Opération inverse de la création d'un tableau croisé
+
+```{r, echo=FALSE, out.width='100%'}
+knitr::include_graphics("Graphics/tidy-9.png")
+```
+
+
+## Séparer des colonnes (_spread_)
+
+Crée une colonne par modalité d'une variable
+
+```{r, echo=FALSE, out.width='90%'}
+knitr::include_graphics("Graphics/tidy-8.png")
+```
+
+
+## Valeurs manquantes
+
+Les valeurs manquantes explicites (valeur `NA`) peuvent être conservées dans les manipulations ou simplement supprimées avec l'option `na.rm=TRUE`.
+
+`complete(var1, var2)` ajoute des enregistrements pour toutes les combinaisons de var1 et var2 manquantes.
+
+
+[Référence](http://r4ds.had.co.nz/tidy-data.html#missing-values-3)
+
+
+## Transformation
+
+Outils du package _dplyr_
+
+Idée :
+
+- enchaîner les opérations de transformation avec les `%>%`
+
+- Les écrire et les tester une à une
+
+
+## Filtrer les lignes (_filter_)
+
+Filtrer par des conditions sur les différentes variables
+
+```{r}
+# Nombre de lignes
+Paracou15 %>% count %>% pull
+# Après filtrage
+Paracou15 %>% filter(SubPlot==1 & CodeAlive==TRUE) %>% count %>% pull
+```
+Remarquer : `pull()`qui extrait la valeur finale du tibble de taille 1x1 produit par `count()`.
+
+
+## Sélectionner les colonnes (_select_)
+
+Ne retenir que les colonnes intéressantes
+
+```{r}
+Paracou15 %>% select(SubPlot:Yfield, Family:Species, CircCorr) %>% ncol
+```
+
+Remarquer : `ncol()` est une fonction de _base_, pas du tidyverse.
+
+
+## Ajouter des variables calculées (_mutate_)
+
+Des colonnes sont ajoutées au tibble
+
+```{r}
+(Paracou15 %>% select(idTree, CircCorr) %>% mutate(Diametre=CircCorr/pi) -> Paracou15Taille)
+
+```
+Remarquer : le pipe bidirectionnel, les parenthèses pour `print()`
+
+
+## Trier les lignes (_arrange_)
+
+Afficher les plus gros arbres de la parcelle :
+
+```{r}
+Paracou15Taille %>% arrange(desc(CircCorr))
+```
+
+## Regrouper et résumer
+
+Quel est le diamètre moyen des arbres par famille ?
+```{r}
+Paracou15 %>% group_by(Family) %>% summarise(Dmean=mean(CircCorr)/pi, NbTrees=length(idTree)) %>% arrange(desc(Dmean))
+```
+
+# Visualisation
+
+## _ggplot2_
+
+Package destiné à la création de graphiques.
+
+Respecte la [grammaire graphique par couches](http://vita.had.co.nz/papers/layered-grammar.pdf) :
+
+```
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>, 
+     position = <POSITION>
+  ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION>
+```
+
+Les données sont obligatoirement un dataframe (un tibble est un dataframe).
+
+
+## Esthétique
+
+L'esthétique  désigne ce qui est représenté.
+
+Fonction `aes()` à plusieurs niveaux :
+
+- argument `mapping` de `ggplot()`, hérité par les couches (`geom_`)
+
+- argument `mapping` de chaque couche.
+
+
+## Géométrie
+
+La géométrie est définie par une fonction `geom_xxx` et une esthétique (ce qui est représenté).
+
+```{r, out.width='70%'}
+ggplot(data=diamonds) + geom_point(mapping = aes(x=carat, y=price, color=cut))
+```
+
+## Statistiques
+
+Chaque `geom_` va de pair avec une statistique de transformation des données : 
+
+- "identity" pour `geom_point`
+
+- "boxplot" pour `geom_boxplot`
+
+- 20 statistiques disponibles...
+
+
+## Statistiques
+
+```{r}
+ggplot(data=diamonds) + geom_boxplot(mapping = aes(x=cut, y=price))
+```
+
+## Statistiques
+
+Différent de la transformation de variables (cf. _scale_) : le graphique utilise des données dérivées des données originales.
+
+Chaque statistique a un `geom_` par défaut :
+
+`stat_summary` est interchangeable avec `geom_pointrange`
+
+## Statistiques
+
+```{r}
+ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.ymin = min,
+    fun.ymax = max,
+    fun.y = median
+  )
+```
+
+## Echelle
+
+Transformation de variable.
+
+```{r, out.width='70%'}
+diamonds %>% filter(carat>.5) %>% 
+  ggplot(aes(x=carat, y=price)) + geom_point() + scale_x_log10() + scale_y_log10() + geom_smooth(method="lm")
+```
+
+
+## Position
+
+La position définit l'emplacement des objets sur le graphique.
+
+- "identity" en général
+
+- "stack" empile les catégories dans un histogramme
+
+- "jitter" déplace aléatoirement les points dans un `geom_point` pour éviter les superpositions.
+
+
+## Position
+
+```{r}
+ggplot(data=diamonds) + geom_bar(mapping = aes(x=cut, fill=color), position="stack")
+```
+
+
+## Coordonnées
+
+Système de coordonnées :
+
+- `coord_flip()` intervertit `x` et `y`
+
+- `coord_polar()` : coordonnées polaires
+
+- `coord_trans()` transforme l'affichage des coordonnées (mais pas les données comme `scale_`)
+
+- etc.
+
+Exemple : tracer la carte des wacapous de la parcelle 15.
+
+## Coordonnées
+
+```{r}
+(Paracou15 %>% filter(Genus=="Eperua") %>%
+  ggplot() + geom_point(aes(x=Xfield, y=Yfield, size=CircCorr, color=Species)) + coord_fixed() -> P15Map)
+  
+```
+
+## Facettes
+
+Présente plusieurs aspects du même graphique
+```{r}
+P15Map + facet_wrap(~ Species)
+```
+Remarquer : la possibilité d'affiner un graphique
+
+
+## Thèmes
+
+Les thèmes définissent l'aspect des graphiques (hors traitement des données)
+
+Préparation d'un style pour l'impression en noir et blanc :
+
+```{r, out.width='60%'}
+MyStyle <- list(scale_colour_grey(), theme(legend.position="none"), theme_bw())
+P15Map + MyStyle
+```
+
+## autoplot et qplot
+
+`qplot()` mime la syntaxe de `plot()` avec _ggplot2_. Utiliser plutôt la syntaxe native.
+
+`autoplot()` est un générique à étendre par des méthodes S3 pour faire des graphiques ggplot. Exemple:
+
+```{r, out.width='50%'}
+library(entropart)
+as.AbdVector(Paracou618.MC$Ns) %>% autoplot(Distribution = "lnorm") + MyStyle
+```
+
+## Anti-sèche et extensions
+
+[Anti-sèche sur RStudio](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+
+De nombreux packages étendent _ggplot2_ avec de nouveaux `geom_`. Exemple de _ggraph_ :
+
+```{r, echo=FALSE, out.width='80%'}
+knitr::include_graphics("Graphics/ggraph.png")
+```

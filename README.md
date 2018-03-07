@@ -34,9 +34,9 @@ Vectoriser
 
 
 Références
-- [Advanced R de Hadley Wickham](http://adv-r.had.co.nz/OO-essentials.html)
+- [Advanced R](http://adv-r.had.co.nz/OO-essentials.html)
 - [R Internals](http://colinfay.me/r-internals/)
-- [The R Inferno de Patrick Burns](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+- [The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
 
 
 
@@ -76,13 +76,13 @@ Références
 
 # Tidyverse
 
+[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.pdf)
+
 Manifeste
 
-Organisation
+Bagarre
 
-Pipe
-
-ggplot
+Visualisation
 
 Références
 - [R for Data Science](http://r4ds.had.co.nz/)
