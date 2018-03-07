@@ -24,6 +24,13 @@ InstallPackages <- function(Packages) {
 }
 InstallPackages(c("devtools", "tidyverse"))
 library("tidyverse", "EcoFoG", "entropart")
+
+# Set plotting to bw plot default, but with transparent background elements.  
+# Note transparency requires the panel.background, plot.background, and device background all be set!
+theme_set(theme_bw(base_size=12))
+theme_update(panel.background = element_rect(fill = "transparent", colour = NA),
+             plot.background = element_rect(fill = "transparent", colour = NA))
+knitr::opts_chunk$set(dev.args=list(bg="transparent"))
 ```
 
 # Manifeste
@@ -392,10 +399,25 @@ Remarquer : la possibilité d'affiner un graphique
 
 Les thèmes définissent l'aspect des graphiques (hors traitement des données)
 
-Préparation d'un style pour l'impression en noir et blanc :
+Dans ce document : pas de fond grisé dans les graphiques (`theme_bw`), police 12, modifié pour que le fond soit transparent:
+
+```{r, eval=FALSE}
+theme_set(theme_bw(base_size=12))
+theme_update(panel.background = element_rect(fill = "transparent", colour = NA),
+             plot.background = element_rect(fill = "transparent", colour = NA))
+```
+
+Ce sont des options globales, valides pour la session R en cours.
+
+
+## Styles
+
+Possibilité d'enregistrer des paramètres de forme dans une liste.
+
+Préparation d'un style pour l'impression en noir et blanc, sans cartouches de légende.
 
 ```{r, out.width='60%'}
-MyStyle <- list(scale_colour_grey(), theme(legend.position="none"), theme_bw())
+MyStyle <- list(scale_colour_grey(), theme(legend.position="none"))
 P15Map + MyStyle
 ```
 
