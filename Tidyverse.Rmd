@@ -31,6 +31,8 @@ theme_set(theme_bw(base_size=12))
 theme_update(panel.background = element_rect(fill = "transparent", colour = NA),
              plot.background = element_rect(fill = "transparent", colour = NA))
 knitr::opts_chunk$set(dev.args=list(bg="transparent"))
+# Tibbles
+options(tibble.print_min = 5, tibble.width = 50)
 ```
 
 # Manifeste
@@ -203,9 +205,9 @@ Outils du package _dplyr_
 
 Idée :
 
-- enchaîner les opérations de transformation avec les `%>%`
+- enchaîner les opérations de transformation avec les `%>%` ;
 
-- Les écrire et les tester une à une
+- les écrire et les tester une à une.
 
 
 ## Filtrer les lignes (_filter_)
@@ -282,7 +284,11 @@ Les données sont obligatoirement un dataframe (un tibble est un dataframe).
 
 ## Esthétique
 
-L'esthétique  désigne ce qui est représenté.
+L'esthétique  désigne ce qui est représenté : 
+
+- `x` et `y` (ou `fill` pour un histogramme...)
+
+- transparence, couleur, type de courbe, taille, ... : voir l'aide de chaque `geom_`.
 
 Fonction `aes()` à plusieurs niveaux :
 
@@ -296,7 +302,7 @@ Fonction `aes()` à plusieurs niveaux :
 La géométrie est définie par une fonction `geom_xxx` et une esthétique (ce qui est représenté).
 
 ```{r, out.width='70%'}
-ggplot(data=diamonds) + geom_point(mapping = aes(x=carat, y=price, color=cut))
+ggplot(data=diamonds) + geom_point(mapping = aes(x=carat, y=price, color=cut)) + scale_colour_brewer(palette = "Set1")
 ```
 
 ## Statistiques
@@ -359,8 +365,9 @@ La position définit l'emplacement des objets sur le graphique.
 
 ## Position
 
-```{r}
-ggplot(data=diamonds) + geom_bar(mapping = aes(x=cut, fill=color), position="stack")
+```{r, tidy=FALSE}
+ggplot(data = diamonds) + geom_bar(mapping = aes(x = cut, fill = color), position="stack") + 
+  scale_fill_brewer(palette = "Set1")
 ```
 
 
@@ -412,7 +419,7 @@ Ce sont des options globales, valides pour la session R en cours.
 
 ## Styles
 
-Possibilité d'enregistrer des paramètres de forme dans une liste.
+Possibilité d'enregistrer des paramètres de forme au-delà du thème dans une liste.
 
 Préparation d'un style pour l'impression en noir et blanc, sans cartouches de légende.
 
@@ -421,15 +428,38 @@ MyStyle <- list(scale_colour_grey(), theme(legend.position="none"))
 P15Map + MyStyle
 ```
 
+## Gestion des couleurs
+
+Les couleurs par défaut sont assez laides.
+
+Utiliser `scale_color_xxx`et `scale_fill_xxx`
+
+Le suffixe `_brewer` est pour utiliser des palettes de [ColorBrewer](http://colorbrewer2.org)
+
+```{r, echo=FALSE, out.width='60%'}
+knitr::include_graphics("Graphics/brewer.all.jpg")
+```
+
+## Gestion des couleurs
+
+Le suffixe `_gradient` permet de produire un gradient de couleurs pour les valeurs continues.
+
+Voir les autres fonctions dans l'aide du package.
+
+- Méthode : se créer progressivement des styles (par ex. : couleur et noir et blanc), les enregistrer et les utiliser systématiquement.
+
+
+
 ## autoplot et qplot
 
 `qplot()` mime la syntaxe de `plot()` avec _ggplot2_. Utiliser plutôt la syntaxe native.
 
 `autoplot()` est un générique à étendre par des méthodes S3 pour faire des graphiques ggplot. Exemple:
 
-```{r, out.width='50%'}
-library(entropart)
-as.AbdVector(Paracou618.MC$Ns) %>% autoplot(Distribution = "lnorm") + MyStyle
+```{r, out.width='50%', tidy=FALSE}
+library("entropart")
+Paracou618.MC$Ns %>% as.AbdVector %>% 
+  autoplot(Distribution = "lnorm") + MyStyle
 ```
 
 ## Anti-sèche et extensions

@@ -86,4 +86,5 @@ Visualisation
 
 Références
 - [R for Data Science](http://r4ds.had.co.nz/)
+- [Site web de ggplot2](http://ggplot2.tidyverse.org/)
 - [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
