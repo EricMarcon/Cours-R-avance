@@ -65,6 +65,57 @@ Documentation : `vignette("tibble", package="tibble")`
 ggplot2::diamonds
 ```
 
+## Pipe (tuyau)
+
+Le package _magrittr_ introduit le pipe ` %>% ` (`Ctrl + Shift + m`)
+
+```{r, echo=FALSE, out.width='50%'}
+knitr::include_graphics(c("Graphics/magritte.jpg", "Graphics/magrittr.jpg"))
+```
+
+Modèle du pipeline de la programmation système repris par la bioinformatique
+
+## Pipe (tuyau)
+
+Exemple :
+```{r}
+1:10 %>% sum
+```
+
+Principe : les données résultant d'un calcul sont passées à la fonction suivante.
+
+Enchainement :
+```{r}
+1:10 %>% sqrt %>% sum
+```
+
+Code plus lisible que `sum(sqrt(1:10))`
+
+
+## Autres opérateurs
+
+Tuyau avec retour :
+```{r, message=FALSE}
+library("magrittr")
+x <- c(4,9)
+x %<>% sqrt
+x
+```
+Embranchement :
+```{r, out.width='5%'}
+x %T>% plot %>% sum
+```
+## Autres opérateurs
+
+Exposition :
+```{r}
+diamonds %$% mean(price)
+```
+
+Le tuyau de base est accessible sans charger `magrittr`
+
+Les autres sont moins utiles
+
 
 ## Méthode de travail
 
