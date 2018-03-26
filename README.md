@@ -1,7 +1,5 @@
 # R avancé
 
-![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
-
 Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de Guyane.
 
 # Prérequis
