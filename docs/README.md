@@ -15,6 +15,8 @@ Formations préalables :
 
 # Préparation
 
+Installation de l'environnement de travail.
+
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Preparation.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Preparation.pdf)
 
 
@@ -22,18 +24,15 @@ Formations préalables :
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Langage.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Langage.pdf)
 
-Architecture de R
-
-Style de codage
-
-Environnements et recherche
-
-Eléments du langage
-
-Vectoriser
+Maîtrise du langage :
+- Architecture de R
+- Style de codage
+- Environnements et recherche
+- Eléments du langage
+- Vectoriser
 
 
-Références
+Références :
 - [Advanced R](http://adv-r.had.co.nz/OO-essentials.html)
 - [R Internals](http://colinfay.me/r-internals/)
 - [The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
@@ -44,14 +43,12 @@ Références
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Productivite.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Productivite.pdf)
 
-Figures pour la publication
+Méthodes pour travailler efficacement et de façon reproductible :
+- Figures pour la publication
+- Collaborer avec GitHub
+- Ecrire avec RMarkdown
 
-Collaborer avec GitHub
-
-Ecrire avec RMarkdown
-
-Références
-
+Références :
 - [R Markdown](https://rmarkdown.rstudio.com/)
 - [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
 - [Happy Git and GitHub for the useR](http://happygitwithr.com/)
@@ -62,13 +59,12 @@ Références
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Package.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Package.pdf)
 
-Créer un package
+Création de packages et codage avancé :
+- Créer un package
+- Inclure du code C
+- Paralléliser
 
-Inclure du code C
-
-Paralléliser
-
-Références
+Références :
 - [Efficient R programming](https://csgillespie.github.io/efficientR/)
 - [R packages](http://r-pkgs.had.co.nz/)
 
@@ -78,13 +74,12 @@ Références
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.pdf)
 
-Manifeste
+Entrez dans l'univers bien rangé :
+- Manifeste
+- Bagarre avec les données
+- Visualisation
 
-Bagarre
-
-Visualisation
-
-Références
+Références :
 - [R for Data Science](http://r4ds.had.co.nz/)
 - [Site web de ggplot2](http://ggplot2.tidyverse.org/)
 - [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
