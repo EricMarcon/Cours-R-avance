@@ -38,6 +38,22 @@ Références :
 
 
 
+# Tidyverse
+
+[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.pdf)
+
+Entrez dans l'univers bien rangé :
+- Manifeste
+- Bagarre avec les données
+- Visualisation
+
+Références :
+- [R for Data Science](http://r4ds.had.co.nz/)
+- [Site web de ggplot2](http://ggplot2.tidyverse.org/)
+- [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
+
+
+
 # Productivité
 
 [Voir le support](https://EricMarcon.github.io/Cours-R-avance/Productivite.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Productivite.pdf)
@@ -66,19 +82,3 @@ Création de packages et codage avancé :
 Références :
 - [Efficient R programming](https://csgillespie.github.io/efficientR/)
 - [R packages](http://r-pkgs.had.co.nz/)
-
-
-
-# Tidyverse
-
-[Voir le support](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.html) ou le [télécharger](https://EricMarcon.github.io/Cours-R-avance/Tidyverse.pdf)
-
-Entrez dans l'univers bien rangé :
-- Manifeste
-- Bagarre avec les données
-- Visualisation
-
-Références :
-- [R for Data Science](http://r4ds.had.co.nz/)
-- [Site web de ggplot2](http://ggplot2.tidyverse.org/)
-- [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
