@@ -31,7 +31,7 @@ InstallPackages(c("devtools", "roxygen2"))
 
 Trois fois le même code : écrire une fonction.
 
-Trois utilisations de la même fonction : écrire un package.
+Trois fonctions qui se complètent : écrire un package.
 
 
 ## Formalisme
@@ -114,7 +114,7 @@ Choix :
 
 - un fichier `Project.R` pour le code commun à tout le package
 
-- un fichier R par groupe de fonctions, ici :  `Double.R` et `FuzzyDouble.R`
+- un fichier R par groupe de fonctions, ici :  `Double.R`, ...
 
 
 ## Project.R
@@ -128,11 +128,12 @@ Code commun
 #'
 #' @name multiple
 #' @docType package
-#' @import ggplot2  # Erreur volontaire
+#' @import ggplot2
 NULL
 ```
+L'importation de l'espace de noms de ggplot2 est inutile, c'est une erreur volontaire.
 
-## Compute.R
+## Douvle.R
 
 Première version de `Double(x)`
 
@@ -412,7 +413,7 @@ Ecrire un méthode `autoplot` pour `FuzzyDouble`
 ```{r}
 autoplot.FuzzyDouble <- function(object, xlab="x", ylab="Double", ..., LineCol="red") {
   # ggplot
-  thePlot <- ggplot2::ggplot(data = x, ggplot2::aes_(x=~x, y=~y)) + 
+  thePlot <- ggplot2::ggplot(data = object, ggplot2::aes_(x=~x, y=~y)) + 
     ggplot2::geom_point() +
     ggplot2::labs(x=xlab, y=ylab) + 
     ggplot2::geom_line(ggplot2::aes_(y=~2*x), colour=LineCol)

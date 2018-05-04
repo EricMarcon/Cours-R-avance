@@ -434,7 +434,7 @@ Système de coordonnées :
 
 - etc.
 
-Exemple : tracer la carte des wacapous de la parcelle 15.
+Exemple : tracer la carte des wapas de la parcelle 15.
 
 ## Coordonnées
 

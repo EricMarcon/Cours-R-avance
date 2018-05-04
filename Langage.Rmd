@@ -173,7 +173,7 @@ PersonneRC <- setRefClass("PersonneRC",
     fields = list(Nom = "character", Prenom = "character"),
     methods = list(print = function() cat(Prenom, Nom)))
 MoiRC <- new("PersonneRC", Nom = "Marcon", Prenom ="Eric")
-pryr::otype(Moi)
+pryr::otype(MoiRC)
 MoiRC$print()
 ```
 
@@ -516,8 +516,6 @@ is.integer(1)
 typeof(1)
 ```
 
-`is.atomic()` est vrai pour tous ces types.
-
 `is.numeric()` est vrai pour les réels et les entiers.
 
 
@@ -531,6 +529,8 @@ rownames(df) <- c("Unidimensionnel", "Bidimensionnel", "n-dimensionnel")
 colnames(df)[2] <- "Récursif"
 knitr::kable(df)
 ```
+
+`is.atomic()` teste la structure d'une variable.
 
 
 ## Vecteurs
