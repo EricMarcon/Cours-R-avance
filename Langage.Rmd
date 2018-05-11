@@ -20,7 +20,7 @@ options(width=50)
 # Install necessary packages only
 InstallPackages <- function(Packages) {
   sapply(Packages, function(Package) 
-    if (!Package %in% installed.packages()[, 1]) install.packages(Package))
+    if (!Package %in% installed.packages()[, 1]) install.packages(Package, repos="https://cran.rstudio.com/"))
 }
 InstallPackages(c("pryr", "methods", "R6", "microbenchmark", "rversions"))
 ```
@@ -192,9 +192,9 @@ PersonneR6 <- R6Class("PersonneR6",
                       public = list(Nom="character", Prenom="character",
                                     initialize = function(Nom=NA, Prenom=NA) {
                                       self$Nom <- Nom ; self$Prenom <- Prenom},
-                                    print = function() cat(Prenom, Nom)))
+                                    print = function() cat(self$Prenom, self$Nom)))
 MoiR6 <- PersonneR6$new(Nom = "Marcon", Prenom ="Eric")
-MoiRC$print()
+MoiR6$print()
 ```
 
 ## RC et S6 - Résumé

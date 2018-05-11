@@ -169,7 +169,7 @@ pryr::otype(print)</pre>
 
 <pre >## function (x, ...) 
 ## UseMethod(&quot;print&quot;)
-## &lt;bytecode: 0x000000001deb9fd0&gt;
+## &lt;bytecode: 0x000000001b5ae880&gt;
 ## &lt;environment: namespace:base&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>S3 - print</h2></hgroup><article  id="s3---print">
@@ -257,11 +257,8 @@ pryr::otype(Moi)</pre>
 <pre class = 'prettyprint lang-r'>setMethod(&quot;print&quot;, signature = &quot;Personne&quot;, function(x, 
     ...) {
     cat(&quot;La personne est:&quot;, x@Prenom, x@Nom)
-})</pre>
-
-<pre >## [1] &quot;print&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>print(Moi)</pre>
+})
+print(Moi)</pre>
 
 <pre >## La personne est: Eric Marcon</pre>
 
@@ -282,9 +279,9 @@ PersonneRC &lt;- setRefClass(&quot;PersonneRC&quot;,
     fields = list(Nom = &quot;character&quot;, Prenom = &quot;character&quot;),
     methods = list(print = function() cat(Prenom, Nom)))
 MoiRC &lt;- new(&quot;PersonneRC&quot;, Nom = &quot;Marcon&quot;, Prenom =&quot;Eric&quot;)
-pryr::otype(Moi)</pre>
+pryr::otype(MoiRC)</pre>
 
-<pre >## [1] &quot;S4&quot;</pre>
+<pre >## [1] &quot;RC&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>MoiRC$print()</pre>
 
@@ -304,9 +301,9 @@ PersonneR6 &lt;- R6Class(&quot;PersonneR6&quot;, public = list(Nom = &quot;chara
         Prenom = NA) {
         self$Nom &lt;- Nom
         self$Prenom &lt;- Prenom
-    }, print = function() cat(Prenom, Nom)))
+    }, print = function() cat(self$Prenom, self$Nom)))
 MoiR6 &lt;- PersonneR6$new(Nom = &quot;Marcon&quot;, Prenom = &quot;Eric&quot;)
-MoiRC$print()</pre>
+MoiR6$print()</pre>
 
 <pre >## Eric Marcon</pre>
 
@@ -350,7 +347,7 @@ a</pre>
 
 <pre class = 'prettyprint lang-r'>(a &lt;- runif(1)) * (rnorm(1) -&gt; b)</pre>
 
-<pre >## [1] 0.3745762</pre>
+<pre >## [1] -0.1892117</pre>
 
 </article></slide><slide class=""><hgroup><h2>Espacement</h2></hgroup><article  id="espacement">
 
@@ -372,7 +369,7 @@ a</pre>
     print(&quot;Plus petit&quot;)
 }</pre>
 
-<pre >## [1] &quot;Plus petit&quot;</pre>
+<pre >## [1] &quot;Plus grand&quot;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Commentaires</h2></hgroup><article  id="commentaires">
 
@@ -462,7 +459,7 @@ y &lt;- 2</pre>
 <pre class = 'prettyprint lang-r'>f &lt;- function() environment()
 f()</pre>
 
-<pre >## &lt;environment: 0x000000001de50610&gt;</pre>
+<pre >## &lt;environment: 0x0000000020d4be88&gt;</pre>
 
 <pre class = 'prettyprint lang-r'>parent.env(f())</pre>
 
@@ -541,7 +538,7 @@ isNamespaceLoaded(&quot;devtools&quot;)</pre>
 
 <pre class = 'prettyprint lang-r'>stats:::sd(rnorm(100))</pre>
 
-<pre >## [1] 0.9891358</pre>
+<pre >## [1] 1.031927</pre>
 
 </article></slide><slide class=""><hgroup><h2>Objets non exportés</h2></hgroup><article  id="objets-non-exportes-1">
 
@@ -646,8 +643,6 @@ typeof(raw(1))</pre>
 
 <pre >## [1] &quot;double&quot;</pre>
 
-<p><code>is.atomic()</code> est vrai pour tous ces types.</p>
-
 <p><code>is.numeric()</code> est vrai pour les réels et les entiers.</p>
 
 </article></slide><slide class=""><hgroup><h2>Structures de données</h2></hgroup><article  id="structures-de-donnees">
@@ -676,6 +671,8 @@ typeof(raw(1))</pre>
 <td align="left"></td>
 </tr>
 </table>
+
+<p><code>is.atomic()</code> teste la structure d&#39;une variable.</p>
 
 </article></slide><slide class=""><hgroup><h2>Vecteurs</h2></hgroup><article  id="vecteurs">
 
@@ -770,7 +767,7 @@ typeof(raw(1))</pre>
 
 <pre >## function (..., deparse.level = 1) 
 ## .Internal(cbind(deparse.level, ...))
-## &lt;bytecode: 0x000000001c200ca8&gt;
+## &lt;bytecode: 0x000000001b7a76c0&gt;
 ## &lt;environment: namespace:base&gt;</pre>
 
 <p><a href='http://colinfay.me/r-internals/internal-vs-primitive.html' title=''>Référence</a></p>
@@ -871,7 +868,7 @@ typeof(raw(1))</pre>
 ##     }
 ##     else ans
 ## }
-## &lt;bytecode: 0x000000001c138848&gt;
+## &lt;bytecode: 0x000000001ab55e20&gt;
 ## &lt;environment: namespace:base&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Eléments d&#39;une fonction</h2></hgroup><article  id="elements-dune-fonction">
@@ -918,7 +915,7 @@ typeof(raw(1))</pre>
 <pre class = 'prettyprint lang-r'>f &lt;- function() environment()
 f()</pre>
 
-<pre >## &lt;environment: 0x00000000208bba80&gt;</pre>
+<pre >## &lt;environment: 0x00000000201e2a20&gt;</pre>
 
 <p>Son environnement parent est celui du code qui l&#39;a appelé :</p>
 
@@ -995,7 +992,7 @@ Surface(Longueur = 2)</pre>
 <pre class = 'prettyprint lang-r'>x &lt;- runif(10, min = 5, max = 10)
 mean(x, na.rm = FALSE)</pre>
 
-<pre >## [1] 7.787063</pre>
+<pre >## [1] 7.001771</pre>
 
 <p>Ne jamais abréger les noms des arguments ou <code>T</code> pour <code>TRUE</code>.</p>
 
@@ -1069,11 +1066,11 @@ g(&quot;Rien&quot;, x = &quot;Argument x passé à f par g&quot;)</pre>
 x2 &lt;- runif(3)
 sqrt(x1)</pre>
 
-<pre >## [1] 0.5270885 0.6896452 0.9928676</pre>
+<pre >## [1] 0.5359577 0.8990074 0.6667354</pre>
 
 <pre class = 'prettyprint lang-r'>x1 + x2</pre>
 
-<pre >## [1] 0.6618196 0.5233829 1.9243738</pre>
+<pre >## [1] 1.068098 0.983405 1.268514</pre>
 
 <p>Raisonner en termes de vecteurs plutôt que de scalaires.</p>
 
@@ -1094,6 +1091,7 @@ sqrt(x1)</pre>
 ##         return(Log)
 ##     }
 ## }
+## &lt;bytecode: 0x000000001ff78f30&gt;
 ## &lt;environment: namespace:entropart&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Fonctions de résumé</h2></hgroup><article  id="fonctions-de-resume">
@@ -1102,7 +1100,7 @@ sqrt(x1)</pre>
 
 <pre class = 'prettyprint lang-r'>sum(x1)</pre>
 
-<pre >## [1] 1.739219</pre>
+<pre >## [1] 1.540001</pre>
 
 </article></slide><slide class=""><hgroup><h2>Fonctions non vectorielles</h2></hgroup><article  id="fonctions-non-vectorielles">
 
@@ -1118,11 +1116,11 @@ mb &lt;- microbenchmark(sqrt(x1), sapply(x1, FUN = sqrt),
     lapply(x1, sqrt), vapply(x1, sqrt, FUN.VALUE = 0))
 summary(mb)[, c(&quot;expr&quot;, &quot;median&quot;)]</pre>
 
-<pre >##                              expr  median
-## 1                        sqrt(x1)   5.744
-## 2          sapply(x1, FUN = sqrt) 425.641
-## 3                lapply(x1, sqrt) 364.718
-## 4 vapply(x1, sqrt, FUN.VALUE = 0) 365.949</pre>
+<pre >##                              expr   median
+## 1                        sqrt(x1)   9.4365
+## 2          sapply(x1, FUN = sqrt) 727.9995
+## 3                lapply(x1, sqrt) 530.2565
+## 4 vapply(x1, sqrt, FUN.VALUE = 0) 572.5125</pre>
 
 <p>Infiniment plus lent qu&#39;une fonction vectorielle.</p>
 
@@ -1144,9 +1142,9 @@ Vapply &lt;- function(x) vapply(x, FUN = sqrt, 0)
 mb &lt;- microbenchmark(Vapply(x1), Boucle(x1))
 summary(mb)[, c(&quot;expr&quot;, &quot;median&quot;)]</pre>
 
-<pre >##         expr  median
-## 1 Vapply(x1) 384.821
-## 2 Boucle(x1)  93.949</pre>
+<pre >##         expr   median
+## 1 Vapply(x1) 396.7180
+## 2 Boucle(x1) 110.7695</pre>
 
 </article></slide><slide class=""><hgroup><h2>Boucles</h2></hgroup><article  id="boucles-1">
 
@@ -1171,7 +1169,7 @@ RacineX &lt;- Boucle(x1)</pre>
 
 <pre class = 'prettyprint lang-r'>replicate(3, runif(1))</pre>
 
-<pre >## [1] 0.1210385 0.2290798 0.8272789</pre>
+<pre >## [1] 0.2517168 0.4917887 0.6179944</pre>
 
 <p>est équivalent à <code>runif(3)</code>.</p>
 
@@ -1193,8 +1191,11 @@ RacineX &lt;- Boucle(x1)</pre>
 
 <p>Extraire les données</p>
 
-<pre class = 'prettyprint lang-r'>library(&quot;EcoFoG&quot;)
-Paracou15 &lt;- Paracou2df(WHERE = &quot;Plot=&#39;15&#39; AND CensusYear=2016&quot;)</pre>
+<pre class = 'prettyprint lang-r'>library(&quot;EcoFoG&quot;)</pre>
+
+<pre >## Loading required package: magrittr</pre>
+
+<pre class = 'prettyprint lang-r'>Paracou15 &lt;- Paracou2df(WHERE = &quot;Plot=&#39;15&#39; AND CensusYear=2016&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Organisation des données</h2></hgroup><article  id="organisation-des-donnees">
 
@@ -1219,9 +1220,9 @@ Paracou15X[1:2, ]</pre>
 <pre class = 'prettyprint lang-r'>mb &lt;- microbenchmark(apply(Paracou15X, 2, sum), colSums(Paracou15X))
 summary(mb)[, c(&quot;expr&quot;, &quot;median&quot;)]</pre>
 
-<pre >##                        expr   median
-## 1 apply(Paracou15X, 2, sum) 185.4365
-## 2       colSums(Paracou15X)  96.8210</pre>
+<pre >##                        expr  median
+## 1 apply(Paracou15X, 2, sum) 121.231
+## 2       colSums(Paracou15X)  85.539</pre>
 
 <pre class = 'prettyprint lang-r'>colSums(Paracou15X)</pre>
 
@@ -1240,8 +1241,8 @@ summary(mb)[, c(&quot;expr&quot;, &quot;median&quot;)]</pre>
 ## 1 apply(Paracou15X, 2, function(x) x &gt; 0)
 ## 2                 colSums(Paracou15X &gt; 0)
 ##     median
-## 1 216.2055
-## 2  96.8205</pre>
+## 1 363.4875
+## 2 149.9485</pre>
 
 <pre class = 'prettyprint lang-r'>colSums(Paracou15X &gt; 0)</pre>
 
@@ -1273,8 +1274,8 @@ mb &lt;- microbenchmark(Boucle(Paracou15X), Apply(Paracou15X))
 summary(mb)[, c(&quot;expr&quot;, &quot;median&quot;)]</pre>
 
 <pre >##                 expr   median
-## 1 Boucle(Paracou15X) 1.709949
-## 2  Apply(Paracou15X) 1.860308</pre>
+## 1 Boucle(Paracou15X) 2.442665
+## 2  Apply(Paracou15X) 3.202869</pre>
 
 <p><code>apply()</code> clarifie (vectorise) le traitement mais ne l&#39;accélère pas.</p></article></slide>
 

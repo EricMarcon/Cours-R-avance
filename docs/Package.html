@@ -120,7 +120,7 @@
 
 <p>Trois fois le même code : écrire une fonction.</p>
 
-<p>Trois utilisations de la même fonction : écrire un package.</p>
+<p>Trois fonctions qui se complètent : écrire un package.</p>
 
 </article></slide><slide class=""><hgroup><h2>Formalisme</h2></hgroup><article  id="formalisme">
 
@@ -193,7 +193,7 @@ LazyData: true</pre>
 
 <ul>
 <li><p>un fichier <code>Project.R</code> pour le code commun à tout le package</p></li>
-<li><p>un fichier R par groupe de fonctions, ici : <code>Double.R</code> et <code>FuzzyDouble.R</code></p></li>
+<li><p>un fichier R par groupe de fonctions, ici : <code>Double.R</code>, &#8230;</p></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Project.R</h2></hgroup><article  id="project.r">
@@ -206,10 +206,12 @@ LazyData: true</pre>
 #&#39;
 #&#39; @name multiple
 #&#39; @docType package
-#&#39; @import ggplot2  # Erreur volontaire
+#&#39; @import ggplot2
 NULL</pre>
 
-</article></slide><slide class=""><hgroup><h2>Compute.R</h2></hgroup><article  id="compute.r">
+<p>L&#39;importation de l&#39;espace de noms de ggplot2 est inutile, c&#39;est une erreur volontaire.</p>
+
+</article></slide><slide class=""><hgroup><h2>Douvle.R</h2></hgroup><article  id="douvle.r">
 
 <p>Première version de <code>Double(x)</code></p>
 
@@ -467,7 +469,7 @@ Double.integer &lt;- function(x) {
 <pre class = 'prettyprint lang-r'>autoplot.FuzzyDouble &lt;- function(object, xlab = &quot;x&quot;, 
     ylab = &quot;Double&quot;, ..., LineCol = &quot;red&quot;) {
     # ggplot
-    thePlot &lt;- ggplot2::ggplot(data = x, ggplot2::aes_(x = ~x, 
+    thePlot &lt;- ggplot2::ggplot(data = object, ggplot2::aes_(x = ~x, 
         y = ~y)) + ggplot2::geom_point() + ggplot2::labs(x = xlab, 
         y = ylab) + ggplot2::geom_line(ggplot2::aes_(y = ~2 * 
         x), colour = LineCol)
@@ -900,6 +902,8 @@ int timesTwo(int x) {
 <pre >Suggests: testthat</pre>
 
 <p>Ajouter les fichiers de tests dans <code>tests/testthat</code></p>
+
+<p>Leur nom doit commencer par <code>test</code></p>
 
 </article></slide><slide class=""><hgroup><h2>Exemple de test</h2></hgroup><article  id="exemple-de-test">
 
