@@ -293,7 +293,7 @@ Des colonnes sont ajoutées au tibble
 (Paracou15 %>% select(idTree, CircCorr) %>% mutate(Diametre=CircCorr/pi) -> Paracou15Taille)
 
 ```
-Remarquer : le pipe bidirectionnel, les parenthèses pour `print()`
+Remarquer : les parenthèses pour `print()`
 
 
 ## Trier les lignes (_arrange_)
@@ -417,7 +417,8 @@ La position définit l'emplacement des objets sur le graphique.
 ## Position
 
 ```{r, tidy=FALSE}
-ggplot(data = diamonds) + geom_bar(mapping = aes(x = cut, fill = color), position="stack") + 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color), position="stack") + 
   scale_fill_brewer(palette = "Set1")
 ```
 
@@ -483,7 +484,7 @@ P15Map + MyStyle
 
 Les couleurs par défaut sont assez laides.
 
-Utiliser `scale_color_xxx`et `scale_fill_xxx`
+Utiliser `scale_color_xxx` et `scale_fill_xxx`
 
 Le suffixe `_brewer` est pour utiliser des palettes de [ColorBrewer](http://colorbrewer2.org)
 
