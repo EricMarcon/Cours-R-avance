@@ -65,6 +65,7 @@ Méthodes pour travailler efficacement et de façon reproductible :
 
 Références :
 - [R Markdown](https://rmarkdown.rstudio.com/)
+- [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
 - [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/)
 - [Happy Git and GitHub for the useR](http://happygitwithr.com/)
 
