@@ -1,7 +1,7 @@
 ---
 title: 'R: Tidyverse'
 author: "Eric Marcon"
-date: "02 mai 2018"
+date: "24 septembre 2019"
 output:
   beamer_presentation:
     df_print: default
@@ -186,10 +186,12 @@ devtools::install_github("EcoFoG/EcoFoG")
 Extraire les données
 ```{r}
 library("EcoFoG")
-Paracou15 <- as.tibble(Paracou2df("Plot='15' AND CensusYear=2016"))
+Paracou2df("Plot='6' AND CensusYear=2016") %>% 
+  as_tibble ->
+  Paracou6
 ```
 
-- Afficher Paracou15
+- Afficher Paracou6
 
 
 ## Rassemblement (_unite_)
@@ -199,17 +201,18 @@ Famille, genre et espèce des arbres sont dans 3 colonnes.
 Créer une colonne avec le nom complet de l'espèce.
 
 ```{r, tidy=FALSE}
-Paracou15 %>%
-  unite(col=spName, Family, Genus, Species, remove=FALSE) -> Paracou15
+Paracou6 %<>%
+  unite(col=spName, Family, Genus, Species, remove=FALSE)
 ```
 
 - Afficher le résultat.
 
 Le pipeline `%>%` (`Ctrl + Shift + m`) passe la donnée à la fonction suivante.
+Le pipeline avec retour modifie la variable de départ.
 
 La commande classique est :
-```{r}
-Paracou15 <- unite(data=Paracou15, col=spName, Family, Genus, Species, remove = FALSE)
+```{r, eval=FALSE}
+Paracou6 <- unite(data=Paracou6, col=spName, Family, Genus, Species, remove = FALSE)
 ```
 
 
@@ -267,9 +270,9 @@ Filtrer par des conditions sur les différentes variables
 
 ```{r}
 # Nombre de lignes
-Paracou15 %>% count %>% pull
+Paracou6 %>% count %>% pull
 # Après filtrage
-Paracou15 %>% filter(SubPlot==1 & CodeAlive==TRUE) %>% count %>% pull
+Paracou6 %>% filter(SubPlot==1 & CodeAlive==TRUE) %>% count %>% pull
 ```
 Remarquer : `pull()`qui extrait la valeur finale du tibble de taille 1x1 produit par `count()`.
 
@@ -279,7 +282,7 @@ Remarquer : `pull()`qui extrait la valeur finale du tibble de taille 1x1 produit
 Ne retenir que les colonnes intéressantes
 
 ```{r}
-Paracou15 %>% select(SubPlot:Yfield, Family:Species, CircCorr) %>% ncol
+Paracou6 %>% select(SubPlot:Yfield, Family:Species, CircCorr) %>% ncol
 ```
 
 Remarquer : `ncol()` est une fonction de _base_, pas du tidyverse.
@@ -290,7 +293,7 @@ Remarquer : `ncol()` est une fonction de _base_, pas du tidyverse.
 Des colonnes sont ajoutées au tibble
 
 ```{r}
-(Paracou15 %>% select(idTree, CircCorr) %>% mutate(Diametre=CircCorr/pi) -> Paracou15Taille)
+(Paracou6 %>% select(idTree, CircCorr) %>% mutate(Diametre=CircCorr/pi) -> Paracou6Taille)
 
 ```
 Remarquer : les parenthèses pour `print()`
@@ -301,14 +304,14 @@ Remarquer : les parenthèses pour `print()`
 Afficher les plus gros arbres de la parcelle :
 
 ```{r}
-Paracou15Taille %>% arrange(desc(CircCorr))
+Paracou6Taille %>% arrange(desc(CircCorr))
 ```
 
 ## Regrouper et résumer
 
 Quel est le diamètre moyen des arbres par famille ?
 ```{r}
-Paracou15 %>% group_by(Family) %>% summarise(Dmean=mean(CircCorr)/pi, NbTrees=length(idTree)) %>% arrange(desc(Dmean))
+Paracou6 %>% group_by(Family) %>% summarise(Dmean=mean(CircCorr)/pi, NbTrees=length(idTree)) %>% arrange(desc(Dmean))
 ```
 
 # Visualisation
@@ -435,13 +438,13 @@ Système de coordonnées :
 
 - etc.
 
-Exemple : tracer la carte des wapas de la parcelle 15.
+Exemple : tracer la carte des wapas de la parcelle 6.
 
 ## Coordonnées
 
 ```{r}
-(Paracou15 %>% filter(Genus=="Eperua") %>%
-  ggplot() + geom_point(aes(x=Xfield, y=Yfield, size=CircCorr, color=Species)) + coord_fixed() -> P15Map)
+(Paracou6 %>% filter(Genus=="Eperua") %>%
+  ggplot() + geom_point(aes(x=Xfield, y=Yfield, size=CircCorr, color=Species)) + coord_fixed() -> P6Map)
   
 ```
 
@@ -449,7 +452,7 @@ Exemple : tracer la carte des wapas de la parcelle 15.
 
 Présente plusieurs aspects du même graphique
 ```{r}
-P15Map + facet_wrap(~ Species)
+P6Map + facet_wrap(~ Species)
 ```
 Remarquer : la possibilité d'affiner un graphique
 
@@ -477,7 +480,7 @@ Préparation d'un style pour l'impression en noir et blanc, sans cartouches de l
 
 ```{r, out.width='60%'}
 MyStyle <- list(scale_colour_grey(), theme(legend.position="none"))
-P15Map + MyStyle
+P6Map + MyStyle
 ```
 
 ## Gestion des couleurs
