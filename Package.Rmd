@@ -112,7 +112,7 @@ Organisation libre, les fichiers ne seront pas dans le package.
 
 Choix :
 
-- un fichier `Project.R` pour le code commun à tout le package
+- un fichier `project.R` pour le code commun à tout le package
 
 - un fichier R par groupe de fonctions, ici :  `Double.R`, ...
 
@@ -133,7 +133,7 @@ NULL
 ```
 L'importation de l'espace de noms de ggplot2 est inutile, c'est une erreur volontaire.
 
-## Douvle.R
+## double.R
 
 Première version de `Double(x)`
 
