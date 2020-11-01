@@ -1,6 +1,9 @@
 # R avancé
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-superseded-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
-Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de Guyane.
+Ceci est le support du cours R avancé de l'Ecole doctorale de l'Université de Guyane en 2018.
+Il est remplacé par le cours [Travailler avec R](https://ericmarcon.github.io/Cours-travailleR/).
 
 # Prérequis
 
